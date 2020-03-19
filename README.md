@@ -59,3 +59,7 @@ docker kill $(docker ps -q)
 docker rm $(docker ps -qa)
 docker system prune -a
 docker volume prune
+
+# couchDB
+
+http://localhost:5984/_utils
