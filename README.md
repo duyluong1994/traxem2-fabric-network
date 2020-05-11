@@ -23,6 +23,8 @@ peer channel join -b traxemchannel.block
 (CORE_PEER_MSPCONFIGPATH CORE_PEER_LOCALMSPID change if use for other Org)
 CORE_PEER_ADDRESS="peer1.org1.traxem.vn:8051" CORE_PEER_TLS_ROOTCERT_FILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.traxem.vn/peers/peer1.org1.traxem.vn/tls/ca.crt" peer channel join -b traxemchannel.block
 
+### chaincode
+
 docker cp fabcar 3809d70ba443:/opt/gopath/src/github.com/chaincode
 peer lifecycle chaincode package fabcar.tar.gz -p /opt/gopath/src/github.com/chaincode/fabcar/go/ --lang golang --label fabcar_1
 
