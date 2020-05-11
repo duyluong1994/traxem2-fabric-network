@@ -75,6 +75,8 @@ Organizations:
             # encoded in the genesis block in the Application section context
             - Host: peer0.org1.traxem.vn
               Port: 7051
+            - Host: peer1.org1.traxem.vn
+              Port: 8051
 
 
 ################################################################################
@@ -269,7 +271,7 @@ Channel: &ChannelDefaults
 Profiles:
 
     OneOrgsChannel:
-        Consortium: SampleConsortium
+        Consortium: TraxemConsortium
         <<: *ChannelDefaults
         Application:
             <<: *ApplicationDefaults
@@ -278,7 +280,7 @@ Profiles:
             Capabilities:
                 <<: *ApplicationCapabilities
 
-    SampleMultiNodeEtcdRaft:
+    TraxemMultiNodeEtcdRaft:
         <<: *ChannelDefaults
         Capabilities:
             <<: *ChannelCapabilities
@@ -302,6 +304,6 @@ Profiles:
             Organizations:
             - <<: *OrdererOrg
         Consortiums:
-            SampleConsortium:
+            TraxemConsortium:
                 Organizations:
                 - *Org1

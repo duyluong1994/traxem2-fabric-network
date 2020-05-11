@@ -9,10 +9,11 @@ export FABRIC_CFG_PATH=\$PWD
 export CHANNEL_NAME=traxemchannel
 
 mkdir channel-artifacts
-configtxgen -profile SampleMultiNodeEtcdRaft --channelID byfn-sys-channel --outputBlock ./channel-artifacts/genesis.block
+configtxgen -profile TraxemMultiNodeEtcdRaft --channelID byfn-sys-channel --outputBlock ./channel-artifacts/genesis.block
 configtxgen -profile OneOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID traxemchannel
 configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID traxemchannel -asOrg Org1MSP
 
+docker-compose -f host1.yaml up -d (run without couchdb)
 docker-compose -f host1.yaml -f host_couch.yaml up -d
 docker exec -it cli bash
 
