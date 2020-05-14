@@ -4,8 +4,8 @@ docker swarm init
 docker swarm join-token manager
 docker network create --attachable --driver overlay traxem-network
 
-cryptogen generate --config=./crypto-config.yaml
-export FABRIC_CFG_PATH=\$PWD
+cryptogen generate --config=./config/crypto-config.yaml
+export FABRIC_CFG_PATH=\$PWD/config
 export CHANNEL_NAME=traxemchannel
 
 mkdir channel-artifacts
@@ -25,12 +25,10 @@ CORE_PEER_ADDRESS="peer1.org1.traxem.vn:8051" CORE_PEER_TLS_ROOTCERT_FILE="/opt/
 
 ### chaincode
 
-docker cp fabcar 3809d70ba443:/opt/gopath/src/github.com/chaincode
-peer lifecycle chaincode package fabcar.tar.gz -p /opt/gopath/src/github.com/chaincode/fabcar/go/ --lang golang --label fabcar_1
-
 peer lifecycle chaincode install fabcar.tar.gz
 peer lifecycle chaincode queryinstalled
 
+(package IDs are different)
 export CC_PACKAGE_ID=fabcar_1:bf9d00f61f8cfa8e9ee7be925b103d0f23cc155cd8482bb04111e820b4037a00
 
 CORE_PEER_ADDRESS="peer1.org1.traxem.vn:8051" CORE_PEER_TLS_ROOTCERT_FILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.traxem.vn/peers/peer1.org1.traxem.vn/tls/ca.crt" peer lifecycle chaincode install fabcar.tar.gz
