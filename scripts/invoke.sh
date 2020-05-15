@@ -1,0 +1,3 @@
+#!bin/bash
+name="qrcode"
+docker exec -it cli peer chaincode invoke -o orderer.traxem.vn:7050 --tls true -C traxemchannel -n $name --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem -c '{"Args":["Org:setOrgState","[{\"id\":1,\"name\":\"Lupo Corp\"},{\"id\":2,\"name\":\"Lupo Corp2\"}]"]}' --waitForEvent
