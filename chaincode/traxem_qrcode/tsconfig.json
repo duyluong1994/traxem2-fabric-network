@@ -5,12 +5,9 @@
         "moduleResolution": "node",
         "module": "commonjs",
         "declaration": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "experimentalDecorators": true
     },
-    "include": [
-        "./src/**/*"
-    ],
-    "exclude": [
-        "./src/**/*.spec.ts"
-    ]
+    "include": ["./src/**/*"],
+    "exclude": ["./src/**/*.spec.ts"]
 }

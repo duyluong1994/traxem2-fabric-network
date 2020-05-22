@@ -1,20 +1,20 @@
 #!bin/bash
-echo "Chaincode chaincode_name: $1; package_name:$2 version: $3; sequence: $4"
+echo "Chaincode chaincode_name: $1; cc_package_id:$2 version: $3; sequence: $4"
 chaincode_name=$1
-package_name=$2
+CC_PACKAGE_ID=$2
 version=$3
 sequence=$4
 
-echo "Determining cc_package ID for chaincode"
+# echo "Determining cc_package ID for chaincode"
 
-REGEX="Package ID: (.*), Label: $package_name"
-if [[ `docker exec -it cli peer lifecycle chaincode queryinstalled` =~ $REGEX ]]; then
-  CC_PACKAGE_ID=${BASH_REMATCH[1]}
-  echo $CC_PACKAGE_ID
-else
-  echo "Could not find cc_package ID for $package_name chaincode"
-  exit 1
-fi
+# REGEX="Package ID: (.*), Label: $label"
+# if [[ `docker exec -it cli peer lifecycle chaincode queryinstalled` =~ $REGEX ]]; then
+#   CC_PACKAGE_ID=${BASH_REMATCH[1]}
+#   echo $CC_PACKAGE_ID
+# else
+#   echo "Could not find cc_package ID for $label chaincode"
+#   exit 1
+# fi
 
 echo "Approving smart contract"
 docker exec -it cli peer lifecycle chaincode approveformyorg -C traxemchannel -n $chaincode_name -v $version --package-id $CC_PACKAGE_ID --sequence $sequence --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem

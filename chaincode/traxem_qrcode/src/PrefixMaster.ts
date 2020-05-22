@@ -1,0 +1,13 @@
+export const PrefixMaster = {
+    TRAXEM: "TRAXEM",
+    MEDIA: "MEDIA",
+    ORG: "ORG",
+    QR: "QR",
+    USER: "USER",
+    FACTORY: "FACTORY",
+    PRODUCT: "PRODUCT",
+    GUARANTEE: "GUARANTEE",
+    MAINTENANCE: "MAINTENANCE",
+    HISTORY: "HISTORY",
+    ACTION_INFO: "ACTION_INFO",
+};

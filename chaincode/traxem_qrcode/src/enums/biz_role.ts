@@ -1,6 +1,6 @@
 export enum BIZ_ROLE {
-    PRODUCER = 1,
-    VERIFIER = 2,
-    TRANSPORTER = 3,
-    RETAILER = 4,
+    PRODUCER = "PRODUCER",
+    VERIFIER = "VERIFIER",
+    TRANSPORTER = "TRANSPORTER",
+    RETAILER = "RETAILER",
 }

@@ -1,6 +1,6 @@
 export enum ROLE {
-    ADMIN = 1,
-    SUP = 2,
-    MOD = 3,
-    MEM = 4,
+    ADMIN = "ADMIN",
+    SUP = "SUP",
+    MOD = "MOD",
+    MEM = "MEM",
 }

@@ -15,14 +15,18 @@
         "start": "fabric-chaincode-node start",
         "build": "tsc",
         "build:watch": "tsc -w",
+        "build-ti": "`npm bin`/ts-interface-builder ./src/enums/*.ts -o ./src/tis && `npm bin`/ts-interface-builder ./src/models/*.ts -o ./src/tis",
         "prepublishOnly": "npm run build"
     },
     "engineStrict": true,
     "author": "Hyperledger",
     "license": "Apache-2.0",
     "dependencies": {
+        "chokidar-cli": "^2.1.0",
         "fabric-contract-api": "^2.0.0",
-        "fabric-shim": "^2.0.0"
+        "fabric-shim": "^2.0.0",
+        "lodash": "^4.17.15",
+        "yup": "^0.29.0"
     },
     "devDependencies": {
         "@types/chai": "^4.1.7",
@@ -30,6 +34,7 @@
         "@types/node": "^10.12.10",
         "@types/sinon": "^5.0.7",
         "@types/sinon-chai": "^3.2.1",
+        "@types/yup": "^0.29.0",
         "chai": "^4.2.0",
         "mocha": "^5.2.0",
         "nyc": "^14.1.1",
