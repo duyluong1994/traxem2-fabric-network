@@ -25,7 +25,7 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/traxem.vn/msp
+        MSPDir: ../crypto-config/ordererOrganizations/traxem.vn/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -49,7 +49,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: Org1MSP
 
-        MSPDir: crypto-config/peerOrganizations/org1.traxem.vn/msp
+        MSPDir: ../crypto-config/peerOrganizations/org1.traxem.vn/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -289,8 +289,8 @@ Profiles:
                 Consenters:
                 - Host: orderer.traxem.vn
                   Port: 7050
-                  ClientTLSCert: ./crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
-                  ServerTLSCert: ./crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
+                  ClientTLSCert: ../crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
+                  ServerTLSCert: ../crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
             Addresses:
                 - orderer.traxem.vn:7050
             Organizations:
