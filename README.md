@@ -8,7 +8,6 @@ cryptogen generate --config=./config/crypto-config.yaml
 export FABRIC_CFG_PATH=$PWD/config
 export CHANNEL_NAME=traxemchannel
 
-mkdir channel-artifacts
 configtxgen -profile TraxemMultiNodeEtcdRaft --channelID byfn-sys-channel --outputBlock ./channel-artifacts/genesis.block
 configtxgen -profile OneOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID traxemchannel
 configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID traxemchannel -asOrg Org1MSP

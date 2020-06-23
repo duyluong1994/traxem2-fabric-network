@@ -289,8 +289,8 @@ Profiles:
                 Consenters:
                 - Host: orderer.traxem.vn
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
+                  ClientTLSCert: ./crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
+                  ServerTLSCert: ./crypto-config/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/tls/server.crt
             Addresses:
                 - orderer.traxem.vn:7050
             Organizations:
