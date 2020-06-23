@@ -5,7 +5,7 @@ docker swarm join-token manager
 docker network create --attachable --driver overlay traxem-network
 
 cryptogen generate --config=./config/crypto-config.yaml
-export FABRIC_CFG_PATH=\$PWD/config
+export FABRIC_CFG_PATH=$PWD/config
 export CHANNEL_NAME=traxemchannel
 
 mkdir channel-artifacts
