@@ -13,7 +13,7 @@ function json_ccp {
         -e "s/\${CAPORT}/$4/" \
         -e "s#\${PEERPEM}#$PP#" \
         -e "s#\${CAPEM}#$CP#" \
-        ccp-template.json 
+        ccp-template.json
 }
 
 ORG=1
@@ -23,4 +23,4 @@ CAPORT=7054
 PEERPEM=crypto-config/peerOrganizations/org1.traxem.vn/tlsca/tlsca.org1.traxem.vn-cert.pem
 CAPEM=crypto-config/peerOrganizations/org1.traxem.vn/ca/ca.org1.traxem.vn-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > connection-org1-traxem.json
+echo "$(json_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > connection-profile.json

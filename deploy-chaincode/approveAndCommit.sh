@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 echo "Chaincode chaincode_name: $1; cc_package_id:$2 version: $3; sequence: $4"
 chaincode_name=$1
 CC_PACKAGE_ID=$2

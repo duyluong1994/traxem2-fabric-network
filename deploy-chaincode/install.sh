@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 cc_folder=$1
 label=$2
 
