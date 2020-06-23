@@ -188,6 +188,34 @@ export class Qrcode extends Contract {
     }
 
     @Param("code", "string")
+    @Param("maintenance", "string")
+    @Param("userId", "string")
+    @Transaction()
+    public async addMedia(
+        ctx: Context,
+        code: string,
+        payload: string,
+        userId: string
+    ) {
+        const mediaIds = JSON.parse(payload);
+        if (Array.isArray(mediaIds)) {
+            let qrState = await StateDB.getState(ctx, code, this.prefix);
+            qrState.mediaId.push(mediaIds);
+            //update qrcode
+            await StateDB.setState(
+                ctx,
+                qrState,
+                this.prefix,
+                QrcodeSchema,
+                false,
+                true
+            );
+        } else {
+            throw new Error("payload must be array of string.");
+        }
+    }
+
+    @Param("code", "string")
     @Param("payload", "string")
     @Param("userId", "string")
     @Transaction()
@@ -198,29 +226,31 @@ export class Qrcode extends Contract {
         userId: string
     ) {
         const newHistoryData = JSON.parse(payload);
-        // const newData = {
-        //     code,
-        //     factoryId: newHistoryData.id,
-        //     updatedBy: userId,
-        // };
+        const newQrData = {
+            code,
+            factoryId: newHistoryData.id,
+            updatedBy: userId,
+        };
 
-        // //Create history data
-        // await StateDB.setState(
-        //     ctx,
-        //     newHistoryData,
-        //     PrefixMaster.HISTORY,
-        //     HistoryDataSchema
-        // );
+        //Create history data
+        await StateDB.setState(
+            ctx,
+            newHistoryData,
+            PrefixMaster.HISTORY,
+            HistoryDataSchema,
+            true,
+            false
+        );
 
-        // //update qrcode
-        // await StateDB.setState(
-        //     ctx,
-        //     newData,
-        //     this.prefix,
-        //     QrcodeSchema,
-        //     false,
-        //     true
-        // );
+        //update qrcode
+        await StateDB.setState(
+            ctx,
+            newQrData,
+            this.prefix,
+            QrcodeSchema,
+            false,
+            true
+        );
     }
 
     @Param("code", "string")

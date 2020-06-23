@@ -16,7 +16,7 @@ configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts
 docker-compose -f host1.yaml up -d (run without couchdb)
 docker-compose -f host1.yaml -f host_couch.yaml up -d
 
-### create and join channel
+## create and join channel
 
 docker exec -it cli bash
 
@@ -27,7 +27,7 @@ docker exec -it cli peer channel join -b traxemchannel.block
 (CORE_PEER_MSPCONFIGPATH CORE_PEER_LOCALMSPID change if use for other Org)
 docker exec -it -e CORE_PEER_ADDRESS="peer1.org1.traxem.vn:8051" -e CORE_PEER_TLS_ROOTCERT_FILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.traxem.vn/peers/peer1.org1.traxem.vn/tls/ca.crt" cli peer channel join -b traxemchannel.block
 
-### chaincode
+## chaincode
 
 peer lifecycle chaincode package fabcar.tar.gz -p /opt/gopath/src/github.com/chaincode/fabcar/go/ --lang golang --label fabcar_1
 
@@ -56,18 +56,21 @@ peer chaincode invoke -o orderer.traxem.vn:7050 --tls true -C \$CHANNEL_NAME -n 
 
 peer chaincode query -C \$CHANNEL_NAME -n fabcar -c '{"Args":["queryCar","CAR0"]}'
 
-# clean each host
+## clean each host
 
 docker-compose -f hostn.yaml down -v
 docker rmi $(docker images | awk '($1 ~ /dev-peer.\*/) {print \$3}')
 
-# remove everything docker
+## remove everything docker
 
 docker kill $(docker ps -q)
 docker rm $(docker ps -qa)
 docker system prune -a
 docker volume prune
 
-# couchDB
+## couchDB
 
 http://localhost:5984/_utils
+
+## TODO
+- Rest server
