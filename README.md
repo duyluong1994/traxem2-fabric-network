@@ -55,6 +55,9 @@ peer chaincode invoke -o orderer.traxem.vn:7050 --tls true -C \$CHANNEL_NAME -n 
 
 peer chaincode query -C \$CHANNEL_NAME -n fabcar -c '{"Args":["queryCar","CAR0"]}'
 
+## Rest-Server
+use ccp-generate.sh script to get connection-profile.json file
+
 ## clean each host
 
 docker-compose -f hostn.yaml down -v
