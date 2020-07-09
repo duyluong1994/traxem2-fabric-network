@@ -24,7 +24,7 @@
    * (peerAddresses and tlsRootCertFiles if have more than 1 Org)
    peer lifecycle chaincode commit -o orderer.traxem.vn:7050 -C traxemchannel -n traxem2-qrcode -v 1.0 --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
 
-   * peer lifecycle chaincode querycommitted -C traxemchannel -n traxem_qrcode --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
+   * peer lifecycle chaincode querycommitted -C traxemchannel -n lixil_qrcode --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
 
    * peer chaincode invoke -o orderer.traxem.vn:7050 --tls true -C traxemchannel -n traxem2-qrcode --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem -c '{"Args":["initLedger"]}' --waitForEvent
 

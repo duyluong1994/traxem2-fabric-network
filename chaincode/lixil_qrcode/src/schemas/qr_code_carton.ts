@@ -1,8 +1,11 @@
 import * as yup from "yup";
 import { PrefixMaster } from "../PrefixMaster";
 export const QrcodeSchema = yup.object().shape({
-    code: yup.string().required(),
-    codeurl: yup.string().url().notRequired(),
+    qrCode: yup.string().required(),
+    saleCode:yup.string().notRequired(),
+    sapCode:yup.string().notRequired(),
+    barCode:yup.string().notRequired(),
+    url: yup.string().url().notRequired(),
     name: yup.string().notRequired(),
     description: yup.string().notRequired(),
     orgId: yup

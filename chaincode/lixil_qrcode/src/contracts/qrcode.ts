@@ -10,7 +10,7 @@ import {
     Returns,
     Param,
 } from "fabric-contract-api";
-import { QrcodeSchema } from "../schemas/qrcode";
+import { QrcodeSchema } from "../schemas/qr_code_carton";
 import { ProductSchema } from "../schemas/product";
 import { FactorySchema } from "../schemas/factory";
 import { ContractSchema } from "../schemas/contract";
