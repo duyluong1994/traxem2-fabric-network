@@ -17,6 +17,7 @@ export const createQrState = async (
     isCarton: boolean
 ) => {
     const dataAsBytes = await ctx.stub.getState(prefix + item.qrCode);
+    console.log(JSON.parse(dataAsBytes.toString()), prefix, item);
     if (dataAsBytes || dataAsBytes.length !== 0) {
         throw new Error(
             `${item.qrCode} is existed. Please update it instead of create new.`
