@@ -15,7 +15,7 @@ export const UserSchema = {
         }),
     firstName: yup.string().notRequired(),
     lastName: yup.string().notRequired(),
-    org: yup.object(OrgSchema).notRequired(),
+
     password: yup.string().notRequired(),
     phone: yup.string().notRequired(),
     position: yup.string().notRequired(),
