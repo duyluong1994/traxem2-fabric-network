@@ -1,6 +1,6 @@
 import * as yup from "yup";
-import {UserSchema} from "./user";
-export const ProductSchema = yup.object().shape({
+import { UserSchema } from "./user";
+export const ProductSchema = {
     id: yup.string().required(),
     imageUrl: yup.string().notRequired(),
     description: yup.string().notRequired(),
@@ -12,7 +12,7 @@ export const ProductSchema = yup.object().shape({
     producer: yup.string().notRequired(),
     factoryName: yup.string().notRequired(),
     jobName: yup.string().notRequired(),
-    owner: UserSchema.notRequired(),
+    owner: yup.object().shape(UserSchema).notRequired(),
     producedDate: yup.date().required(),
     expiredDate: yup.date().notRequired(),
-});
+};

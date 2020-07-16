@@ -1,7 +1,7 @@
 import * as yup from "yup";
-import {OrgSchema} from "./org";
-import {MediaSchema} from "./media";
-export const UserSchema = yup.object().shape({
+import { OrgSchema } from "./org";
+import { MediaSchema } from "./media";
+export const UserSchema = {
     id: yup.string().required(),
     username: yup.string().required(),
     avatarUrl: yup.string().url().notRequired(),
@@ -15,7 +15,7 @@ export const UserSchema = yup.object().shape({
         }),
     firstName: yup.string().notRequired(),
     lastName: yup.string().notRequired(),
-    org: OrgSchema.notRequired(),
+    org: yup.object().shape(OrgSchema).notRequired(),
     password: yup.string().notRequired(),
     phone: yup.string().notRequired(),
     position: yup.string().notRequired(),
@@ -38,9 +38,5 @@ export const UserSchema = yup.object().shape({
         .min(1)
         .max(4)
         .notRequired(),
-    media: yup
-        .array()
-        .of(MediaSchema)
-        .max(5)
-        .notRequired(),
-});
+    media: yup.array().of(yup.object().shape(MediaSchema)).max(5).notRequired(),
+};

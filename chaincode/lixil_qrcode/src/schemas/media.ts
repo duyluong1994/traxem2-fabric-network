@@ -1,5 +1,5 @@
 import * as yup from "yup";
-export const MediaSchema = yup.object().shape({
+export const MediaSchema = {
     id: yup.string().required(),
     name: yup.string().required(),
     caption: yup.string().notRequired(),
@@ -9,4 +9,4 @@ export const MediaSchema = yup.object().shape({
     type: yup.string().required(),
     description: yup.string().notRequired(),
     url: yup.string().url().required(),
-});
+};

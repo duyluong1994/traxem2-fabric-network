@@ -4,8 +4,8 @@
 // Telegram: t.me/mr_eos94
 
 import * as yup from "yup";
-import {MediaSchema} from "./media";
-export const OrgSchema = yup.object().shape({
+import { MediaSchema } from "./media";
+export const OrgSchema = {
     id: yup.string().required(),
     name: yup.string().required(),
     address: yup.string().notRequired(),
@@ -28,10 +28,6 @@ export const OrgSchema = yup.object().shape({
         .min(1)
         .max(4)
         .notRequired(),
-    media: yup
-        .array()
-        .of(MediaSchema)
-        .max(5)
-        .notRequired(),
+    media: yup.array().of(yup.object().shape(MediaSchema)).max(5).notRequired(),
     establishedDate: yup.date().notRequired(),
-});
+};
