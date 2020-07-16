@@ -13,7 +13,12 @@ export const QrCodeCartonSchema = yup.object().shape({
     url: yup.string().url().notRequired(),
     name: yup.string().notRequired(),
     description: yup.string().notRequired(),
-    org: OrgSchema.notRequired(),
+    org: yup.lazy((value) => {
+        if (value) {
+            return OrgSchema;
+        }
+        return yup.mixed().notRequired();
+    }),
     factory: yup.lazy((value) => {
         if (value) {
             return FactorySchema;
