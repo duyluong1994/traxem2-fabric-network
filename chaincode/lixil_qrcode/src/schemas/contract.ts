@@ -6,16 +6,16 @@
 import * as yup from "yup";
 import { MediaSchema } from "./media";
 import { UserSchema } from "./user";
-export const ContractSchema = {
+export const ContractSchema = yup.object().shape({
     id: yup.string().required(),
     description: yup.string().notRequired(),
     coverage: yup.string().required(),
     limit: yup.string().required(),
     effectiveDate: yup.date().required(),
     expiredDate: yup.date().notRequired(),
-    media: yup.array().of(yup.object().shape(MediaSchema)).max(5).notRequired(),
+    media: yup.array().of(MediaSchema).max(5).notRequired(),
     contact: yup.string().notRequired(),
     phoneService: yup.string().notRequired(),
     address: yup.string().notRequired(),
-    updatedBy: yup.object().shape(UserSchema).required(),
-};
+    updatedBy: UserSchema.required(),
+});

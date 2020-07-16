@@ -5,7 +5,7 @@
 
 import * as yup from "yup";
 import { MediaSchema } from "./media";
-export const OrgSchema = {
+export const OrgSchema = yup.object().shape({
     id: yup.string().required(),
     name: yup.string().required(),
     address: yup.string().notRequired(),
@@ -28,6 +28,6 @@ export const OrgSchema = {
         .min(1)
         .max(4)
         .notRequired(),
-    media: yup.array().of(yup.object().shape(MediaSchema)).max(5).notRequired(),
+    media: yup.array().of(MediaSchema).max(5).notRequired(),
     establishedDate: yup.date().notRequired(),
-};
+});

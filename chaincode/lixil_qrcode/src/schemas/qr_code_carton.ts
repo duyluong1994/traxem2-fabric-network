@@ -13,11 +13,31 @@ export const QrCodeCartonSchema = yup.object().shape({
     url: yup.string().url().notRequired(),
     name: yup.string().notRequired(),
     description: yup.string().notRequired(),
-    org: yup.object().shape(OrgSchema).notRequired(),
-    factory: yup.object().shape(FactorySchema).notRequired(),
-    product: yup.object().shape(ProductSchema).notRequired(),
-    media: yup.array().of(yup.object().shape(MediaSchema)).max(5).notRequired(),
-    guarantee: yup.object().shape(ContractSchema).notRequired(),
-    maintenance: yup.object().shape(ContractSchema).notRequired(),
-    updatedBy: yup.object().shape(UserSchema).required(),
+    org: OrgSchema.notRequired(),
+    factory: yup.lazy((value) => {
+        if (value) {
+            return FactorySchema;
+        }
+        return yup.mixed().notRequired();
+    }),
+    product: yup.lazy((value) => {
+        if (value) {
+            return ProductSchema;
+        }
+        return yup.mixed().notRequired();
+    }),
+    media: yup.array().of(MediaSchema).max(5).notRequired(),
+    guarantee: yup.lazy((value) => {
+        if (value) {
+            return ContractSchema;
+        }
+        return yup.mixed().notRequired();
+    }),
+    maintenance: yup.lazy((value) => {
+        if (value) {
+            return ContractSchema;
+        }
+        return yup.mixed().notRequired();
+    }),
+    updatedBy: UserSchema.required(),
 });
