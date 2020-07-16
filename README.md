@@ -42,12 +42,12 @@ peer lifecycle chaincode approveformyorg -C traxemchannel -n qrcode -v 1.0 --pac
 
 peer lifecycle chaincode checkcommitreadiness -C traxemchannel -n qrcode -v 1.0 --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
 
-peer lifecycle chaincode querycommitted -C traxemchannel -n qrcode --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
+peer lifecycle chaincode querycommitted -C traxemchannel -n lixil_qrcode --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
 
 (peerAddresses and tlsRootCertFiles if have more than 1 Org)
-peer lifecycle chaincode commit -o orderer.traxem.vn:7050 -C traxemchannel -n qrcode -v 1.0 --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
+peer lifecycle chaincode commit -o orderer.traxem.vn:7050 -C traxemchannel -n lixil_qrcode -v 1.0 --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
 
-peer chaincode invoke -o orderer.traxem.vn:7050 --tls true -C traxemchannel -n qrcode --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem -c '{"Args":["Org:setOrgState","{\"id\":1,\"name\":\"Lupo Corp\"}"]}' --waitForEvent
+peer chaincode invoke -o orderer.traxem.vn:7050 --tls true -C traxemchannel -n lixil_qrcode --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem -c '{"Args":["Org:setOrgState","{\"id\":1,\"name\":\"Lupo Corp\"}"]}' --waitForEvent
 
 peer chaincode query -C traxemchannel -n fabts2 -c '{"Args":["queryCar","CAR0"]}'
 

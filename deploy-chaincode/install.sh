@@ -2,7 +2,7 @@
 cc_folder=$1
 label=$2
 
-pushd ./chaincode/$cc_folder
+pushd ./chaincode/$cc_folder || exit
 npm install
 npm run build
 popd
