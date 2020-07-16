@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { PrefixMaster } from "../PrefixMaster";
+import {UserSchema} from "./user";
 export const ProductSchema = yup.object().shape({
     id: yup.string().required(),
     imageUrl: yup.string().notRequired(),
@@ -12,21 +12,7 @@ export const ProductSchema = yup.object().shape({
     producer: yup.string().notRequired(),
     factoryName: yup.string().notRequired(),
     jobName: yup.string().notRequired(),
-    ownerId: yup
-        .string()
-        .test("ownerId", "ownerId is not valid", async function (ownerId) {
-            if (ownerId) {
-                const context: any = this.options.context;
-                const dataAsBytes = await context.ctx.stub.getState(
-                    PrefixMaster.USER + ownerId
-                );
-                if (!dataAsBytes || dataAsBytes.length === 0) {
-                    return false;
-                }
-            }
-            return true;
-        })
-        .notRequired(),
+    owner: UserSchema.notRequired(),
     producedDate: yup.date().required(),
     expiredDate: yup.date().notRequired(),
 });

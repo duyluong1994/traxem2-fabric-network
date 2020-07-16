@@ -1,10 +1,10 @@
 import * as yup from "yup";
-import { PrefixMaster } from "../PrefixMaster";
+import { UserSchema } from "./user";
 export const HistoryDataSchema = yup.object().shape({
     id: yup.string().required(),
     content: yup.string().required(),
     actionTaken: yup.string().notRequired(),
-    actionInfoId: yup
+    actionInfo: yup
         .object()
         .shape({
             dataContent: yup.string().required(),
@@ -15,21 +15,5 @@ export const HistoryDataSchema = yup.object().shape({
                 .required(),
         })
         .notRequired(),
-    createdBy: yup
-        .string()
-        .test("createdBy", "createdBy is not valid", async function (
-            createdBy
-        ) {
-            if (createdBy) {
-                const context: any = this.options.context;
-                const dataAsBytes = await context.ctx.stub.getState(
-                    PrefixMaster.USER + createdBy
-                );
-                if (!dataAsBytes || dataAsBytes.length === 0) {
-                    return false;
-                }
-            }
-            return true;
-        })
-        .notRequired(),
+    updatedBy: UserSchema.required(),
 });
