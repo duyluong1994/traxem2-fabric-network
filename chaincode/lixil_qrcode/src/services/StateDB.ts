@@ -93,8 +93,8 @@ export const queryState = async (ctx: Context, queryString: string) => {
     return result;
 };
 
-export const getHistory = async (ctx: Context, key: string) => {
-    const promiseOfIterator = ctx.stub.getHistoryForKey(key);
+export const getHistory = async (ctx: Context, key: string, prefix: string) => {
+    const promiseOfIterator = ctx.stub.getHistoryForKey(prefix + key);
 
     const results = [];
     for await (const keyMod of promiseOfIterator) {
