@@ -267,9 +267,16 @@ export class Qrcode extends Contract {
         if (!qrState.isLinked) {
             //not linked yet => return historyData for this qrcode
             if (qrState.isCarton) {
-                return { carton: await StateDB.getHistory(ctx, qrCode) };
+                return {
+                    carton: await StateDB.getHistory(
+                        ctx,
+                        this.QR_PKEY + qrCode
+                    ),
+                };
             } else {
-                return { body: await StateDB.getHistory(ctx, qrCode) };
+                return {
+                    body: await StateDB.getHistory(ctx, this.QR_PKEY + qrCode),
+                };
             }
         } else {
             //    linked => find carton and body then return both historyData
@@ -283,8 +290,14 @@ export class Qrcode extends Contract {
                     .attributes[0];
                 let cartonQrCode = ctx.stub.splitCompositeKey(qr.key)
                     .attributes[1];
-                let bodyHistory = await StateDB.getHistory(ctx, bodyQrCode);
-                let cartonHistory = await StateDB.getHistory(ctx, cartonQrCode);
+                let bodyHistory = await StateDB.getHistory(
+                    ctx,
+                    this.QR_PKEY + bodyQrCode
+                );
+                let cartonHistory = await StateDB.getHistory(
+                    ctx,
+                    this.QR_PKEY + cartonQrCode
+                );
                 return { carton: cartonHistory, body: bodyHistory };
                 break;
             }
