@@ -251,10 +251,7 @@ export class Qrcode extends Contract {
                     cartonCode,
                     this.QR_PKEY
                 );
-                result.qrCode = qrCode;
-                result.updatedBy = qrState.updatedBy;
-                result.updatedAt = qrState.updatedAt;
-                return result;
+                return { carton: result, body: qrState };
             }
         }
         return qrState;
