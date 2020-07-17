@@ -277,18 +277,17 @@ export class Qrcode extends Contract {
                 this.QR_COMPOSITE_PKEY,
                 [qrCode]
             );
-            let cartonQrCode, bodyQrCode;
+
             for await (const qr of qrCompositeItr) {
-                bodyQrCode = ctx.stub.splitCompositeKey(qr.key).attributes[0];
-                cartonQrCode = ctx.stub.splitCompositeKey(qr.key).attributes[1];
+                let bodyQrCode = ctx.stub.splitCompositeKey(qr.key)
+                    .attributes[0];
+                let cartonQrCode = ctx.stub.splitCompositeKey(qr.key)
+                    .attributes[1];
+                let bodyHistory = await StateDB.getHistory(ctx, bodyQrCode);
+                let cartonHistory = await StateDB.getHistory(ctx, cartonQrCode);
+                return { carton: cartonHistory, body: bodyHistory };
                 break;
             }
-            let bodyHistory = await StateDB.getHistory(ctx, bodyQrCode.qrCode);
-            let cartonHistory = await StateDB.getHistory(
-                ctx,
-                cartonQrCode.qrCode
-            );
-            return { carton: cartonHistory, body: bodyHistory };
         }
     }
 }
