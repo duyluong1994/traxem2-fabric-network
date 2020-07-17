@@ -17,5 +17,4 @@ export const HistoryDataSchema = yup.object().shape({
         }
         return yup.mixed().notRequired();
     }),
-    updatedBy: UserSchema.required(),
 });

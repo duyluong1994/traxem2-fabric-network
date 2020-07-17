@@ -66,9 +66,11 @@ export class Qrcode extends Contract {
                 [qrState.qrCode]
             );
             for await (const qr of qrCompositeItr) {
+                console.log(ctx.stub.splitCompositeKey(qr.key));
                 newData.qrCode = ctx.stub.splitCompositeKey(qr.key)[1];
                 break;
             }
+            console.log(newData);
         } else if (!qrState.isCarton && !qrState.isLinked) {
             throw new Error(
                 `This QR code ${qrState.qrCode} is a body. Can't be update if not linked to any carton.`
