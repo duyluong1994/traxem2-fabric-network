@@ -122,7 +122,7 @@ export class Qrcode extends Contract {
         if (bodyQR.isCarton) {
             throw new Error(`${body}'s not a body.`);
         }
-        if (cartonQR.isCarton) {
+        if (!cartonQR.isCarton) {
             throw new Error(`${carton}'s not a carton.`);
         }
 
