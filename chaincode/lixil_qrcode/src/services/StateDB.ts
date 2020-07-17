@@ -98,6 +98,7 @@ export const getHistory = async (ctx: Context, key: string) => {
 
     const results = [];
     for await (const keyMod of promiseOfIterator) {
+        console.log(keyMod);
         const resp: any = {
             timestamp: keyMod.timestamp,
             txId: keyMod.txId,
