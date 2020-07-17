@@ -1,10 +1,10 @@
 #!/bin/bash
 
-function one_line_pem {
+one_line_pem() {
     echo "`awk 'NF {sub(/\\n/, ""); printf "%s\\\\\\\n",$0;}' $1`"
 }
 
-function json_ccp {
+json_ccp() {
     local PP=$(one_line_pem $5)
     local CP=$(one_line_pem $6)
     sed -e "s/\${ORG}/$1/" \
