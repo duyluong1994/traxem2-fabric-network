@@ -12,8 +12,9 @@ configtxgen -profile TraxemMultiNodeEtcdRaft --channelID byfn-sys-channel --outp
 configtxgen -profile OneOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID traxemchannel
 configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID traxemchannel -asOrg Org1MSP
 
-docker-compose -f host1.yaml up -d (run without couchdb)
+docker-compose -f host1.yaml up -d
 docker-compose -f host1.yaml -f host_couch.yaml up -d
+docker-compose -f host1.yaml -f host_couch.yaml -f host_ca.yaml up -d
 
 ## create and join channel
 
