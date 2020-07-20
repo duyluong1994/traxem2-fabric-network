@@ -31,7 +31,7 @@ export class Qrcode extends Contract {
     @Transaction()
     public async create(ctx: Context, qrCodeData: string, isCarton: any) {
         const newData = JSON.parse(qrCodeData);
-        isCarton = isCarton === "true" ? true : false;
+        isCarton = isCarton === "true";
         let dataValid = await StateDB.validateData(
             ctx,
             newData,

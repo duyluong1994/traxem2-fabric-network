@@ -18,7 +18,7 @@ docker-compose -f host1.yaml -f host_couch.yaml -f host_ca.yaml up -d
 
 ## create and join channel
 
-docker exec -it cli bash
+docker exec -it cli bash 
 
 docker exec -it cli peer channel create -o orderer.traxem.vn:7050 -c traxemchannel -f ./channel-artifacts/channel.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
 
@@ -70,10 +70,11 @@ docker kill $(docker ps -q)
 docker rm $(docker ps -qa)
 docker system prune -a
 docker volume prune
+docker container prune
 
 ## couchDB
 
 http://localhost:5984/_utils
 
 ## TODO
-- Rest server
+- FIx bug when get History between linked and not linked carton body.
