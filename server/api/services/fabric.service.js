@@ -25,7 +25,7 @@ const FabricService = async function () {
   await FabricGateway.connect(ccp, {
     wallet,
     identity: "admin",
-    discovery: { enabled: true, asLocalhost: true },
+    discovery: { enabled: true, asLocalhost: false },
   });
 
   // Get the network (channel) our contract is deployed to.
