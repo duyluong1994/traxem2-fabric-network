@@ -4,3 +4,4 @@ node_modules/
 channel-artifacts/*
 crypto-config/*
 connection-profile.json
+.env
