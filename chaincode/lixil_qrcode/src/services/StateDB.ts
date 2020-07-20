@@ -106,7 +106,7 @@ export const getHistory = async (ctx: Context, key: string, prefix: string) => {
         if (keyMod.isDelete) {
             resp.data = "KEY DELETED";
         } else {
-            resp.data = keyMod.value.toString();
+            resp.data = JSON.parse(keyMod.value.toString());
         }
         results.push(resp);
     }
