@@ -2,19 +2,18 @@ const { ErrorHandler } = require("../errors/error");
 
 const createQR = async (req, res, next) => {
   try {
-    const { qrcode, isCarton } = req.body;
+    const { qrCode, isCarton } = req.body;
 
-    const evalResult = await FabricContract.submitTransaction(
-      "Qrcode:create",
-      JSON.stringify(qrcode),
-      isCarton
-    );
+    const evalResult = await FabricContract.submitTransaction("Qrcode:create", [
+      JSON.stringify(qrCode),
+      isCarton,
+    ]);
     console.log(evalResult);
     res.json({
       status: "success",
       status_code: 200,
       message: "QR created",
-      data: qrcode,
+      data: qrCode,
     });
   } catch (e) {
     next(e);
@@ -23,7 +22,7 @@ const createQR = async (req, res, next) => {
 
 const getQrInfo = async (req, res, next) => {
   try {
-    const { qrcode } = req.params;
+    const { qrCode } = req.params;
     if (typeof qrcode.toString() !== "string") {
       throw new ErrorHandler(400, "QR Code must be a string.");
     }
@@ -45,7 +44,7 @@ const getQrInfo = async (req, res, next) => {
 
 const getQrHistory = async (req, res, next) => {
   try {
-    const { qrcode } = req.params;
+    const { qrCode } = req.params;
     if (typeof qrcode.toString() !== "string") {
       throw new ErrorHandler(400, "QR Code must be a string.");
     }

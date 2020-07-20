@@ -5,7 +5,7 @@ const {
 } = require("../controllers/chaincode.controller");
 const ChainCodeRoutes = (app) => {
   app.route("/qrcode").post(createQR);
-  app.route("/qrcode/:qrcode").get(getQrInfo);
-  app.route("/qrcode/history/:qrcode").get(getQrHistory);
+  app.route("/qrcode/:qrCode").get(getQrInfo);
+  app.route("/qrcode/history/:qrCode").get(getQrHistory);
 };
 module.exports = { ChainCodeRoutes };
