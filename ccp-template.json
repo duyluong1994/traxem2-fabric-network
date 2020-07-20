@@ -39,5 +39,17 @@
         "hostnameOverride": "peer1.org${ORG}.traxem.vn"
       }
     }
+  },
+  "certificateAuthorities": {
+    "ca.org${ORG}.traxem.vn": {
+      "url": "https://localhost:${CAPORT}",
+      "caName": "ca-org${ORG}",
+      "tlsCACerts": {
+        "pem": "${CAPEM}"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
   }
 }
