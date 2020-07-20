@@ -25,6 +25,7 @@ const getQrHistory = async (req, res, next) => {
       "Qrcode:getHistory",
       qrcode.toString()
     );
+    console.log(evalResult.toString())
     res.json(JSON.parse(evalResult.toString()));
   } catch (e) {
     next(e);
