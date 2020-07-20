@@ -14,7 +14,7 @@ const getQrInfo = async (req, res, next) => {
     next(e);
   }
 };
-v;
+
 const getQrHistory = async (req, res, next) => {
   try {
     const { qrcode } = req.params;
