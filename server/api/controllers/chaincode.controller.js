@@ -2,19 +2,88 @@ const { ErrorHandler } = require("../errors/error");
 
 const createQR = async (req, res, next) => {
   try {
-    const { qrCode, isCarton } = req.body;
+    const { qrCode, isCarton=false } = req.body;
 
-    const evalResult = await FabricContract.submitTransaction("Qrcode:create", [
+    if(typeof isCarton != "boolean"){
+	throw new ErrorHandler(400, "isCarton must be a boolean.");
+    }
+
+    const bufferResult = await FabricContract.submitTransaction("Qrcode:create", 
       JSON.stringify(qrCode),
-      isCarton,
-    ]);
-    console.log(evalResult);
+      isCarton.toString(),
+    );
+
     res.json({
       status: "success",
       status_code: 200,
-      message: "QR created",
       data: qrCode,
+      ...JSON.parse(bufferResult.toString()),
     });
+
+  } catch (e) {
+    next(e);
+  }
+};
+
+const updateQR = async (req, res, next) => {
+  try {
+    const { qrCode } = req.body;
+
+    const bufferResult = await FabricContract.submitTransaction("Qrcode:update",
+      JSON.stringify(qrCode)
+    );
+
+    res.json({
+      status: "success",
+      status_code: 200,
+      data: qrCode,
+      ...JSON.parse(bufferResult.toString()),
+    });
+
+  } catch (e) {
+    next(e);
+  }
+};
+
+const linkQR = async (req, res, next) => {
+  try {
+    const { body, carton, user } = req.body;
+
+    const bufferResult = await FabricContract.submitTransaction("Qrcode:link",
+      body,
+      carton,
+      JSON.stringify(user)
+    );
+
+    res.json({
+      status: "success",
+      status_code: 200,
+      data: {body, carton, user},
+      ...JSON.parse(bufferResult.toString()),
+    });
+
+  } catch (e) {
+    next(e);
+  }
+};
+
+const addHistoryData = async (req, res, next) => {
+  try {
+    const { qrCode, action, user } = req.body;
+
+    const bufferResult = await FabricContract.submitTransaction("Qrcode:addHistoryData",
+      qrCode,
+      JSON.stringify(action),
+      JSON.stringify(user)
+    );
+
+    res.json({
+      status: "success",
+      status_code: 200,
+      data: {qrCode, action, user},
+      ...JSON.parse(bufferResult.toString()),
+    });
+
   } catch (e) {
     next(e);
   }
@@ -23,12 +92,12 @@ const createQR = async (req, res, next) => {
 const getQrInfo = async (req, res, next) => {
   try {
     const { qrCode } = req.params;
-    if (typeof qrcode.toString() !== "string") {
+    if (typeof qrCode.toString() !== "string") {
       throw new ErrorHandler(400, "QR Code must be a string.");
     }
     const evalResult = await FabricContract.evaluateTransaction(
       "Qrcode:get",
-      qrcode.toString()
+      qrCode.toString()
     );
 
     res.json({
@@ -45,12 +114,12 @@ const getQrInfo = async (req, res, next) => {
 const getQrHistory = async (req, res, next) => {
   try {
     const { qrCode } = req.params;
-    if (typeof qrcode.toString() !== "string") {
+    if (typeof qrCode.toString() !== "string") {
       throw new ErrorHandler(400, "QR Code must be a string.");
     }
     const evalResult = await FabricContract.evaluateTransaction(
       "Qrcode:getHistory",
-      qrcode.toString()
+      qrCode.toString()
     );
 
     if (evalResult.toString().length <= 0) {
@@ -72,4 +141,4 @@ const getQrHistory = async (req, res, next) => {
     next(e);
   }
 };
-module.exports = { getQrInfo, getQrHistory, createQR };
+module.exports = { getQrInfo, getQrHistory, createQR, updateQR, linkQR, addHistoryData };
