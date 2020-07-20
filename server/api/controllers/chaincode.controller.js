@@ -6,10 +6,10 @@ const getQrInfo = async (req, res, next) => {
       throw new ErrorHandler(400, "QR Code must be a string.");
     }
     const evalResult = await FabricContract.evaluateTransaction(
-      "get",
+      "Qrcode:get",
       qrcode.toString()
     );
-    res.json(evalResult);
+    res.json(JSON.parse(evalResult.toString()));
   } catch (e) {
     next(e);
   }
