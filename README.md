@@ -1,4 +1,6 @@
 # traxem2-fabric-network
+Node v12.16.1
+NPM v6.13.4
 
 docker swarm init
 docker swarm join-token manager
