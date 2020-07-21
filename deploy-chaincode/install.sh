@@ -8,7 +8,7 @@ npm run build
 popd
 
 echo "Packaging chaincode ..."
-docker exec -it cli peer lifecycle chaincode package $cc_folder.tar.gz -p /opt/gopath/src/github.com/chaincode/$cc_folder --lang node --label $label
+docker exec -it cli peer lifecycle chaincode package $cc_folder.tar.gz  $cc_folder --lang node --label $label
 
 echo "Installing chaincode ... "
 # docker exec -it cli bash
