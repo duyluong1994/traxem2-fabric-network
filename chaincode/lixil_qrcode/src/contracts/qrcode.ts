@@ -276,11 +276,12 @@ export class Qrcode extends Contract {
             //    linked => find carton and body then return both historyData
             let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
                 this.QR_COMPOSITE_PKEY,
-                [qrCode]
+                ["", qrCode]
             );
             console.log(qrCode, qrCompositeItr);
 
             for await (const qr of qrCompositeItr) {
+                console.log("loop:", qr);
                 let bodyQrCode = ctx.stub.splitCompositeKey(qr.key)
                     .attributes[0];
                 let cartonQrCode = ctx.stub.splitCompositeKey(qr.key)
@@ -297,7 +298,6 @@ export class Qrcode extends Contract {
                     this.QR_PKEY
                 );
                 return { carton: cartonHistory, body: bodyHistory };
-                break;
             }
         }
     }
