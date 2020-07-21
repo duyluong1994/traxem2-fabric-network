@@ -278,12 +278,14 @@ export class Qrcode extends Contract {
                 this.QR_COMPOSITE_PKEY,
                 [qrCode]
             );
+            console.log(qrCode, qrCompositeItr);
 
             for await (const qr of qrCompositeItr) {
                 let bodyQrCode = ctx.stub.splitCompositeKey(qr.key)
                     .attributes[0];
                 let cartonQrCode = ctx.stub.splitCompositeKey(qr.key)
                     .attributes[1];
+                console.log("loop:", bodyQrCode, cartonQrCode);
                 let bodyHistory = await StateDB.getHistory(
                     ctx,
                     bodyQrCode,
