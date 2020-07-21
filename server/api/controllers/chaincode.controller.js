@@ -129,6 +129,7 @@ const getQrHistory = async (req, res, next) => {
         message: "request successful",
         data: { carton: [], body: [] },
       });
+      return;
     }
 
     res.json({
