@@ -20,7 +20,8 @@ import { PrefixMaster } from "../PrefixMaster";
 
 export class Qrcode extends Contract {
     QR_PKEY: string = PrefixMaster.QR_PKEY;
-    QR_COMPOSITE_PKEY: string = PrefixMaster.QR_COMPOSITE_PKEY;
+    QR_COMPOSITE_PKEY_B: string = PrefixMaster.QR_COMPOSITE_PKEY_B;
+    QR_COMPOSITE_PKEY_C: string = PrefixMaster.QR_COMPOSITE_PKEY_C;
     constructor() {
         super("Qrcode");
     }
@@ -59,7 +60,7 @@ export class Qrcode extends Contract {
         if (!qrState.isCarton && qrState.isLinked) {
             // isBody and linked => get CartonKey for update
             let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                this.QR_COMPOSITE_PKEY,
+                this.QR_COMPOSITE_PKEY_B,
                 [qrState.qrCode]
             );
             for await (const qr of qrCompositeItr) {
@@ -126,12 +127,17 @@ export class Qrcode extends Contract {
         }
 
         //link body to carton with compositekey
-        const compositeQRKey = ctx.stub.createCompositeKey(
-            this.QR_COMPOSITE_PKEY,
+        const compositeQRKeyB = ctx.stub.createCompositeKey(
+            this.QR_COMPOSITE_PKEY_B,
             [body, carton]
         );
+        const compositeQRKeyC = ctx.stub.createCompositeKey(
+            this.QR_COMPOSITE_PKEY_C,
+            [carton, body]
+        );
 
-        await ctx.stub.putState(compositeQRKey, new Buffer([0x00]));
+        await ctx.stub.putState(compositeQRKeyB, new Buffer([0x00]));
+        await ctx.stub.putState(compositeQRKeyC, new Buffer([0x00]));
 
         // update QRstate body + carton to linked true
         bodyQR.isLinked = true;
@@ -154,6 +160,8 @@ export class Qrcode extends Contract {
             body,
             carton,
             message: `Linked ${body} to ${carton} successful`,
+            txId: ctx.stub.getTxID(),
+            timestamp: ctx.stub.getTxTimestamp(),
         };
     }
 
@@ -185,7 +193,7 @@ export class Qrcode extends Contract {
         if (!qrState.isCarton && qrState.isLinked) {
             // isBody and linked => get CartonKey for add historyData
             let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                this.QR_COMPOSITE_PKEY,
+                this.QR_COMPOSITE_PKEY_B,
                 [qrState.qrCode]
             );
             for await (const qr of qrCompositeItr) {
@@ -234,23 +242,43 @@ export class Qrcode extends Contract {
     @Transaction(false)
     public async get(ctx: Context, qrCode: string): Promise<any> {
         let qrState = await StateDB.getState(ctx, qrCode, this.QR_PKEY);
-        if (!qrState.isCarton && qrState.isLinked) {
-            // isBody and linked => get CartonKey and assign data to qrcode and return it.
-            let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                this.QR_COMPOSITE_PKEY,
-                [qrState.qrCode]
-            );
-            for await (const qr of qrCompositeItr) {
-                let cartonCode = ctx.stub.splitCompositeKey(qr.key)
-                    .attributes[1];
-                let result = await StateDB.getState(
-                    ctx,
-                    cartonCode,
-                    this.QR_PKEY
+
+        if (qrState.isLinked) {
+            if (!qrState.isCarton) {
+                // isBody and linked => get CartonKey
+                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
+                    this.QR_COMPOSITE_PKEY_B,
+                    [qrState.qrCode]
                 );
-                return { carton: result, body: qrState };
+                for await (const qr of qrCompositeItr) {
+                    let cartonCode = ctx.stub.splitCompositeKey(qr.key)
+                        .attributes[1];
+                    let result = await StateDB.getState(
+                        ctx,
+                        cartonCode,
+                        this.QR_PKEY
+                    );
+                    return { carton: result, body: qrState };
+                }
+            } else {
+                // isCarton and linked => get BodyKey
+                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
+                    this.QR_COMPOSITE_PKEY_C,
+                    [qrState.qrCode]
+                );
+                for await (const qr of qrCompositeItr) {
+                    let bodyCode = ctx.stub.splitCompositeKey(qr.key)
+                        .attributes[1];
+                    let result = await StateDB.getState(
+                        ctx,
+                        bodyCode,
+                        this.QR_PKEY
+                    );
+                    return { carton: qrState, body: result };
+                }
             }
         }
+
         return qrState;
     }
 
@@ -261,8 +289,53 @@ export class Qrcode extends Contract {
         // Validate qrCode
         let qrState = await StateDB.getState(ctx, qrCode, this.QR_PKEY);
         //TODO: paginate for big result
-        if (!qrState.isLinked) {
-            //not linked yet => return historyData for this qrcode
+        if (qrState.isLinked) {
+            if (!qrState.isCarton) {
+                // isBody and linked => get CartonKey
+                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
+                    this.QR_COMPOSITE_PKEY_B,
+                    [qrCode]
+                );
+                for await (const qr of qrCompositeItr) {
+                    let cartonQrCode = ctx.stub.splitCompositeKey(qr.key)
+                        .attributes[1];
+
+                    let bodyHistory = await StateDB.getHistory(
+                        ctx,
+                        qrState.qrCode,
+                        this.QR_PKEY
+                    );
+                    let cartonHistory = await StateDB.getHistory(
+                        ctx,
+                        cartonQrCode,
+                        this.QR_PKEY
+                    );
+                    return { carton: cartonHistory, body: bodyHistory };
+                }
+            } else {
+                // isCarton and linked => get BodyKey
+                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
+                    this.QR_COMPOSITE_PKEY_C,
+                    [qrCode]
+                );
+                for await (const qr of qrCompositeItr) {
+                    let bodyQrCode = ctx.stub.splitCompositeKey(qr.key)
+                        .attributes[1];
+
+                    let bodyHistory = await StateDB.getHistory(
+                        ctx,
+                        bodyQrCode,
+                        this.QR_PKEY
+                    );
+                    let cartonHistory = await StateDB.getHistory(
+                        ctx,
+                        qrState.qrCode,
+                        this.QR_PKEY
+                    );
+                    return { carton: cartonHistory, body: bodyHistory };
+                }
+            }
+        } else {
             if (qrState.isCarton) {
                 return {
                     carton: await StateDB.getHistory(ctx, qrCode, this.QR_PKEY),
@@ -271,33 +344,6 @@ export class Qrcode extends Contract {
                 return {
                     body: await StateDB.getHistory(ctx, qrCode, this.QR_PKEY),
                 };
-            }
-        } else {
-            //    linked => find carton and body then return both historyData
-            let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                this.QR_COMPOSITE_PKEY,
-                ["", qrCode]
-            );
-            console.log(qrCode, qrCompositeItr);
-
-            for await (const qr of qrCompositeItr) {
-                console.log("loop:", qr);
-                let bodyQrCode = ctx.stub.splitCompositeKey(qr.key)
-                    .attributes[0];
-                let cartonQrCode = ctx.stub.splitCompositeKey(qr.key)
-                    .attributes[1];
-                console.log("loop:", bodyQrCode, cartonQrCode);
-                let bodyHistory = await StateDB.getHistory(
-                    ctx,
-                    bodyQrCode,
-                    this.QR_PKEY
-                );
-                let cartonHistory = await StateDB.getHistory(
-                    ctx,
-                    cartonQrCode,
-                    this.QR_PKEY
-                );
-                return { carton: cartonHistory, body: bodyHistory };
             }
         }
     }
