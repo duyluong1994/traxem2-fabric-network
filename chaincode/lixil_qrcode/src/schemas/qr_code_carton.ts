@@ -7,7 +7,7 @@ import { MediaSchema } from "./media";
 import { ContractSchema } from "./contract";
 export const QrCodeCartonSchema = yup.object().shape({
     qrCode: yup.string().required(),
-    saleCode: yup.string().notRequired(),
+    salCode: yup.string().notRequired(),
     sapCode: yup.string().notRequired(),
     barCode: yup.string().notRequired(),
     url: yup.string().url().notRequired(),
