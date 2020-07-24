@@ -5,6 +5,10 @@
     "tlsEnable": true,
     "adminUser": "admin",
     "adminPassword": "adminpw",
+    "adminCredential":{
+      "id":"admin",
+      "password":"adminpw"
+    },
     "enableAuthentication": false,
     "organization": "Org1MSP",
     "connection": {
