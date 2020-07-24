@@ -22,8 +22,8 @@ export const createQrState = async (
             `${item.qrCode} is existed. Please update it instead of create new.`
         );
     }
-    item.createdAt = new Date();
-    item.updatedAt = new Date();
+    item.createdTime = new Date();
+    item.updatedTime = new Date();
     item.isCarton = isCarton;
     item.isLinked = false;
 
@@ -56,7 +56,7 @@ export const updateQrState = async (
         );
     }
     Object.assign(it, item);
-    it.updatedAt = new Date();
+    it.updatedTime = new Date();
     await ctx.stub.putState(
         prefix + it.qrCode,
         Buffer.from(JSON.stringify(it))

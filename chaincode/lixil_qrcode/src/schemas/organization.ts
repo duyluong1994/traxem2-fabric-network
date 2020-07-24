@@ -14,20 +14,20 @@ export const OrgSchema = yup.object().shape({
     description: yup.string().notRequired(),
     email: yup.string().email().notRequired(),
     fax: yup.string().notRequired(),
-    hotLine: yup.string().notRequired(),
+    hostline: yup.string().notRequired(),
     logoUrl: yup.string().url().notRequired(),
     phone: yup.string().notRequired(),
+    province: yup.string().notRequired(),
+    ranking: yup.number().notRequired(),
     representativeName: yup.string().notRequired(),
     representativePosition: yup.string().notRequired(),
     shortName: yup.string().notRequired(),
+    status: yup.string().notRequired(),
     taxNumber: yup.string().notRequired(),
     website: yup.string().url().notRequired(),
-    bizRoles: yup
-        .array()
-        .of(yup.string().matches(/(PRODUCER|VERIFIER|TRANSPORTER|RETAILER)/))
-        .min(1)
-        .max(4)
-        .notRequired(),
+    bizRole: yup.string().notRequired(),
+    bizNumber: yup.string().notRequired(),
     media: yup.array().of(MediaSchema).max(5).notRequired(),
-    establishedDate: yup.date().notRequired(),
+    verifiedDate: yup.date().notRequired(),
+    verifiedId: yup.string().notRequired(),
 });

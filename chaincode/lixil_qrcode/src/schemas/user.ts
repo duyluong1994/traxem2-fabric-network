@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { OrgSchema } from "./org";
+import { OrgSchema } from "./organization";
 import { MediaSchema } from "./media";
 export const UserSchema = yup.object().shape({
     id: yup.string().required(),
@@ -21,27 +21,20 @@ export const UserSchema = yup.object().shape({
         }
         return yup.mixed().notRequired();
     }),
-    password: yup.string().notRequired(),
     phone: yup.string().notRequired(),
     position: yup.string().notRequired(),
-    status: yup
-        .string()
-        .matches(/(INACTIVE|ACTIVE)/)
-        .notRequired()
-        .default(() => {
-            return "INACTIVE";
-        }),
+    registerClass: yup.string().notRequired(),
+    userClass: yup.string().notRequired(),
+    status: yup.string().notRequired(),
     role: yup
         .array()
-        .of(yup.string().matches(/(ADMIN|SUP|MOD|MEM)/))
-        .min(1)
-        .max(4)
-        .notRequired(),
-    bizRoles: yup
-        .array()
-        .of(yup.string().matches(/(PRODUCER|VERIFIER|TRANSPORTER|RETAILER)/))
-        .min(1)
-        .max(4)
+        .of(
+            yup
+                .string()
+                .matches(
+                    /(ADMIN|SUPER|STAFF|STORE_MANAGER|STORE|SALE_MANAGER|SALE|DISTRIBUTER|AGENCY|SHOP)/
+                )
+        )
         .notRequired(),
     media: yup.array().of(MediaSchema).max(5).notRequired(),
 });

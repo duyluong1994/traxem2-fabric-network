@@ -9,7 +9,6 @@ import {
     Transaction,
     Returns,
     Param,
-    Object,
 } from "fabric-contract-api";
 import { QrCodeCartonSchema } from "../schemas/qr_code_carton";
 import { QrCodeBodySchema } from "../schemas/qr_code_body";
@@ -142,8 +141,8 @@ export class Qrcode extends Contract {
         // update QRstate body + carton to linked true
         bodyQR.isLinked = true;
         cartonQR.isLinked = true;
-        bodyQR.updatedAt = new Date();
-        cartonQR.updatedAt = new Date();
+        bodyQR.updatedTime = new Date();
+        cartonQR.updatedTime = new Date();
         bodyQR.updatedBy = userValid;
         cartonQR.updatedBy = userValid;
         await ctx.stub.putState(
@@ -213,7 +212,7 @@ export class Qrcode extends Contract {
             targetQR.historyData = [];
         }
         targetQR.historyData.push(newHistoryData);
-        targetQR.updatedAt = new Date();
+        targetQR.updatedTime = new Date();
         targetQR.updatedBy = newUser;
         await ctx.stub.putState(
             this.QR_PKEY + targetQR.qrCode,
@@ -223,7 +222,7 @@ export class Qrcode extends Contract {
         // Also update body QR code status
         if (bodyQrCode) {
             let bodyQR = await StateDB.getState(ctx, bodyQrCode, this.QR_PKEY);
-            bodyQR.updatedAt = new Date();
+            bodyQR.updatedTime = new Date();
             bodyQR.updatedBy = newUser;
             await ctx.stub.putState(
                 this.QR_PKEY + bodyQR.qrCode,

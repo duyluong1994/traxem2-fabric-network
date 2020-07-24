@@ -1,7 +1,8 @@
 import * as yup from "yup";
-import { OrgSchema } from "./org";
+import { OrgSchema } from "./organization";
 import { FactorySchema } from "./factory";
-import { ProductSchema } from "./product";
+import { ProductSchema } from "./production";
+import { WarrantySchema } from "./warranty";
 import { UserSchema } from "./user";
 import { MediaSchema } from "./media";
 import { ContractSchema } from "./contract";
@@ -13,7 +14,7 @@ export const QrCodeCartonSchema = yup.object().shape({
     url: yup.string().url().notRequired(),
     name: yup.string().notRequired(),
     description: yup.string().notRequired(),
-    org: yup.lazy((value) => {
+    organization: yup.lazy((value) => {
         if (value) {
             return OrgSchema;
         }
@@ -32,9 +33,9 @@ export const QrCodeCartonSchema = yup.object().shape({
         return yup.mixed().notRequired();
     }),
     media: yup.array().of(MediaSchema).max(5).notRequired(),
-    guarantee: yup.lazy((value) => {
+    warranty: yup.lazy((value) => {
         if (value) {
-            return ContractSchema;
+            return WarrantySchema;
         }
         return yup.mixed().notRequired();
     }),

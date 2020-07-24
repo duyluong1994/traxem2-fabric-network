@@ -8,11 +8,11 @@ export const ProductSchema = yup.object().shape({
     country: yup.string().notRequired(),
     area: yup.string().notRequired(),
     quantity: yup.number().notRequired(),
-    unit: yup.string().notRequired(),
+    quantityUnit: yup.string().notRequired(),
     producer: yup.string().notRequired(),
     factoryName: yup.string().notRequired(),
     jobName: yup.string().notRequired(),
     owner: UserSchema.notRequired(),
     producedDate: yup.date().required(),
-    expiredDate: yup.date().notRequired(),
+    expiryDate: yup.date().notRequired(),
 });
