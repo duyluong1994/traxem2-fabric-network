@@ -5,3 +5,4 @@ channel-artifacts/*
 crypto-config/*
 connection-profile.json
 .env
+config/connection-explorer-profile.json

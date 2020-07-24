@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: Apache-2.0
+version: '2.1'
+
+volumes:
+  pgdata:
+  walletstore:
+
+networks:
+  byfn:
+    external:
+      name: traxem-network
+
+services:
+
+  explorerdb.traxem.vn:
+    image: hyperledger/explorer-db:latest
+    container_name: explorerdb.traxem.vn
+    hostname: explorerdb.traxem.vn
+    environment:
+      - DATABASE_DATABASE=fabricexplorer
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=TraXem@2020
+    healthcheck:
+      test: "pg_isready -h localhost -p 5432 -q -U postgres"
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - byfn
+
+  explorer.traxem.vn:
+    image: hyperledger/explorer:latest
+    container_name: explorer.traxem.vn
+    hostname: explorer.traxem.vn
+    environment:
+      - DATABASE_HOST=explorerdb.traxem.vn
+      - DATABASE_DATABASE=fabricexplorer
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWD=TraXem@2020
+      - LOG_LEVEL_APP=debug
+      - LOG_LEVEL_DB=debug
+      - LOG_LEVEL_CONSOLE=info
+      - LOG_CONSOLE_STDOUT=true
+      - DISCOVERY_AS_LOCALHOST=true
+    volumes:
+      - ./config.json:/opt/explorer/app/platform/fabric/config.json
+      - ../../config/connection-explorer-profile.json:/opt/explorer/app/platform/fabric/connection-profile
+      - ../../crypto-config:/tmp/crypto
+      - walletstore:/opt/wallet
+    command: sh -c "node /opt/explorer/main.js && tail -f /dev/null"
+    ports:
+      - 8080:8080
+    depends_on:
+      explorerdb.traxem.vng:
+        condition: service_healthy
+    networks:
+      - byfn

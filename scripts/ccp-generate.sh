@@ -23,4 +23,4 @@ CAPORT=7054
 PEERPEM=crypto-config/peerOrganizations/org1.traxem.vn/tlsca/tlsca.org1.traxem.vn-cert.pem
 CAPEM=crypto-config/peerOrganizations/org1.traxem.vn/ca/ca.org1.traxem.vn-cert.pem
 
-echo "$(json_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > connection-profile.json
+echo "$(json_ccp $ORG $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > ../config/connection-profile.json

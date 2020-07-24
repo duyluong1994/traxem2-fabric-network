@@ -1,0 +1,9 @@
+{
+  "network-configs": {
+    "traxem-network": {
+      "name": "traxem-network",
+      "profile": "../../config/connection-explorer-profile.json"
+    }
+  },
+  "license": "Apache-2.0"
+}
