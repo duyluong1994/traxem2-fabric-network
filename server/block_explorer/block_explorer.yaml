@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: Apache-2.0
+#SPDX-License-Identifier: Apache-2.0
 version: '2.1'
 
 volumes:
@@ -46,14 +46,14 @@ services:
       - DISCOVERY_AS_LOCALHOST=true
     volumes:
       - ./config.json:/opt/explorer/app/platform/fabric/config.json
-      - ../../config/connection-explorer-profile.json:/opt/explorer/app/platform/fabric/connection-profile
+      - ../../config:/opt/explorer/app/platform/fabric/connection-profile
       - ../../crypto-config:/tmp/crypto
       - walletstore:/opt/wallet
     command: sh -c "node /opt/explorer/main.js && tail -f /dev/null"
     ports:
       - 8080:8080
     depends_on:
-      explorerdb.traxem.vng:
+      explorerdb.traxem.vn:
         condition: service_healthy
     networks:
       - byfn
