@@ -46,7 +46,7 @@ services:
       - DISCOVERY_AS_LOCALHOST=true
     volumes:
       - ./config.json:/opt/explorer/app/platform/fabric/config.json
-      - ../../config:/opt/explorer/app/platform/fabric/connection-profile
+      - ./connection-profile:/opt/explorer/app/platform/fabric/connection-profile
       - ../../crypto-config:/tmp/crypto
       - walletstore:/opt/wallet
     command: sh -c "node /opt/explorer/main.js && tail -f /dev/null"
