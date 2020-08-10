@@ -1,5 +1,6 @@
 export const PrefixMaster = {
-    QR_PKEY: "QR",
-    QR_COMPOSITE_PKEY_B: "body~carton",
-    QR_COMPOSITE_PKEY_C: "carton~body",
+    PRODUCTION: "PROD",
+    ACTIVITY_LOG: "LOG",
+    COMPOSITE_PL: "PROD~LOG",
+    COMPOSITE_LP: "LOG~PROD",
 };

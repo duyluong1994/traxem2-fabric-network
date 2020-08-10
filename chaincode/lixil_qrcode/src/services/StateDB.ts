@@ -1,6 +1,4 @@
 import { Context } from "fabric-contract-api";
-import { PrefixMaster } from "../PrefixMaster";
-import {} from "fabric-shim-api";
 
 export const getAllResults = async (promiseOfIterator: any) => {
     const allResults = [];
@@ -10,61 +8,65 @@ export const getAllResults = async (promiseOfIterator: any) => {
     return allResults;
 };
 
-export const createQrState = async (
-    ctx: Context,
-    item: any,
-    prefix: string,
-    isCarton: boolean
-) => {
-    const dataAsBytes = await ctx.stub.getState(prefix + item.qrCode);
+export const createState = async (ctx: Context, item: any, prefix: string) => {
+    const dataAsBytes = await ctx.stub.getState(prefix + item.id);
     if (dataAsBytes.length !== 0) {
         throw new Error(
-            `${item.qrCode} is existed. Please update it instead of create new.`
+            `${item.id} is existed. Please update it instead of create new.`
         );
     }
-    item.createdTime = new Date();
-    item.updatedTime = new Date();
-    item.isCarton = isCarton;
-    item.isLinked = false;
 
     await ctx.stub.putState(
-        prefix + item.qrCode,
+        prefix + item.id,
         Buffer.from(JSON.stringify(item))
     );
     console.info("Added <--> ", item);
+
     return {
-        qrCode: item.qrCode,
-        message: "Create QR code successful",
+        status: "success",
+        data: item,
+        message: "Create successful",
         txId: ctx.stub.getTxID(),
         timestamp: ctx.stub.getTxTimestamp(),
     };
 };
 
-export const updateQrState = async (
-    ctx: Context,
-    item: any,
-    prefix: string
-) => {
-    const dataAsBytes = await ctx.stub.getState(prefix + item.qrCode);
+export const updateState = async (ctx: Context, item: any, prefix: string) => {
+    const dataAsBytes = await ctx.stub.getState(prefix + item.id);
+
     if (!dataAsBytes || dataAsBytes.length === 0) {
-        throw new Error(`${item.qrCode} does not exist.`);
+        throw new Error(`${item.id} does not exist.`);
     }
+
     let it = JSON.parse(dataAsBytes.toString());
-    if (!it.isCarton) {
-        throw new Error(
-            `This QR code ${it.qrCode} is a body. Can't be update if not linked to any carton.`
-        );
-    }
     Object.assign(it, item);
-    it.updatedTime = new Date();
-    await ctx.stub.putState(
-        prefix + it.qrCode,
-        Buffer.from(JSON.stringify(it))
-    );
+
+    await ctx.stub.putState(prefix + it.id, Buffer.from(JSON.stringify(it)));
+
     console.info("Updated <--> ", it);
     return {
-        qrCode: it.qrCode,
-        message: "Update QR code successful",
+        status: "success",
+        data: it,
+        message: "Update successful",
+        txId: ctx.stub.getTxID(),
+        timestamp: ctx.stub.getTxTimestamp(),
+    };
+};
+
+export const deleteState = async (ctx: Context, id: any, prefix: string) => {
+    const dataAsBytes = await ctx.stub.getState(prefix + id);
+
+    if (!dataAsBytes || dataAsBytes.length === 0) {
+        throw new Error(`${id} does not exist.`);
+    }
+
+    await ctx.stub.deleteState(prefix + id);
+
+    console.info("Deleted <--> ", prefix + id);
+    return {
+        status: "success",
+        id,
+        message: "Delete successful",
         txId: ctx.stub.getTxID(),
         timestamp: ctx.stub.getTxTimestamp(),
     };

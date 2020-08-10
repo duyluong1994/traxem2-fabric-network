@@ -1,16 +1,19 @@
 const {
-  getQrInfo,
-  getQrHistory,
-  createQR,
-  updateQR,
-  linkQR,
-  addHistoryData
+  getProd,
+  getProdHistory,
+  getLogsByProd,
+  createProd,
+  updateProd,
+  deleteProd,
+  getLog,
+  createLog,
 } = require("../controllers/chaincode.controller");
 const ChainCodeRoutes = (app) => {
-  app.route("/qrcode").post(createQR).put(updateQR);
-  app.route("/qrcode/link").post(linkQR);
-  app.route("/qrcode/addHistoryData").post(addHistoryData);
-  app.route("/qrcode/:qrCode").get(getQrInfo);
-  app.route("/qrcode/history/:qrCode").get(getQrHistory);
+  app.route("/production/:id").get(getProd).delete(deleteProd);
+  app.route("/production/:id/block_history").get(getProdHistory);
+  app.route("/production/:id/log").get(getLogsByProd);
+  app.route("/production").post(createProd).put(updateProd);
+  app.route("/activity_log/:id").get(getLog);
+  app.route("/activity_log").post(createLog);
 };
 module.exports = { ChainCodeRoutes };

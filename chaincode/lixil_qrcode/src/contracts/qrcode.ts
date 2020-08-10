@@ -10,340 +10,226 @@ import {
     Returns,
     Param,
 } from "fabric-contract-api";
-import { QrCodeCartonSchema } from "../schemas/qr_code_carton";
-import { QrCodeBodySchema } from "../schemas/qr_code_body";
-import { UserSchema } from "../schemas/user";
-import { HistoryDataSchema } from "../schemas/history-data";
+import { ActivityLogSchema } from "../schemas/activity_log";
+import { ProductionSchema } from "../schemas/production";
 import * as StateDB from "../services/StateDB";
 import { PrefixMaster } from "../PrefixMaster";
 
 export class Qrcode extends Contract {
-    QR_PKEY: string = PrefixMaster.QR_PKEY;
-    QR_COMPOSITE_PKEY_B: string = PrefixMaster.QR_COMPOSITE_PKEY_B;
-    QR_COMPOSITE_PKEY_C: string = PrefixMaster.QR_COMPOSITE_PKEY_C;
+    PRODUCTION_PKEY: string = PrefixMaster.PRODUCTION;
+    ACTIVITY_LOG_PKEY: string = PrefixMaster.ACTIVITY_LOG;
+    COMPOSITE_PL_PKEY: string = PrefixMaster.COMPOSITE_PL;
+    COMPOSITE_LP_PKEY: string = PrefixMaster.COMPOSITE_LP;
+
     constructor() {
         super("Qrcode");
     }
 
-    @Param("qrCodeData", "string")
-    @Param("isCarton", "string")
+    @Param("production", "string")
     @Returns("any")
     @Transaction()
-    public async create(ctx: Context, qrCodeData: string, isCarton: any) {
-        const newData = JSON.parse(qrCodeData);
-        isCarton = isCarton === "true";
-        let dataValid = await StateDB.validateData(
-            ctx,
-            newData,
-            isCarton ? QrCodeCartonSchema : QrCodeBodySchema
-        );
-        if (dataValid) {
-            return await StateDB.createQrState(
+    public async createProd(ctx: Context, production: string) {
+        try {
+            const newData = JSON.parse(production);
+            let dataValid = await StateDB.validateData(
+                ctx,
+                newData,
+                ProductionSchema
+            );
+
+            return await StateDB.createState(
                 ctx,
                 dataValid,
-                this.QR_PKEY,
-                isCarton
+                this.PRODUCTION_PKEY
             );
-        } else {
-            throw new Error(`Something went wrong.`);
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
         }
     }
 
-    @Param("qrCodeData", "string")
+    @Param("production", "string")
     @Returns("any")
     @Transaction()
-    public async update(ctx: Context, qrCodeData: string) {
-        const newData = JSON.parse(qrCodeData);
+    public async updateProd(ctx: Context, production: string) {
+        try {
+            const newData = JSON.parse(production);
 
-        let qrState = await StateDB.getState(ctx, newData.qrCode, this.QR_PKEY);
-        if (!qrState.isCarton && qrState.isLinked) {
-            // isBody and linked => get CartonKey for update
-            let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                this.QR_COMPOSITE_PKEY_B,
-                [qrState.qrCode]
+            let dataValid = await StateDB.validateData(
+                ctx,
+                newData,
+                ProductionSchema
             );
-            for await (const qr of qrCompositeItr) {
-                newData.qrCode = ctx.stub.splitCompositeKey(
-                    qr.key
-                ).attributes[1];
-                break;
-            }
-        } else if (!qrState.isCarton && !qrState.isLinked) {
-            throw new Error(
-                `This QR code ${qrState.qrCode} is a body. Can't be update if not linked to any carton.`
+
+            return await StateDB.updateState(
+                ctx,
+                dataValid,
+                this.PRODUCTION_PKEY
             );
-        }
-
-        let dataValid = await StateDB.validateData(
-            ctx,
-            newData,
-            QrCodeCartonSchema
-        );
-
-        if (dataValid) {
-            return await StateDB.updateQrState(ctx, dataValid, this.QR_PKEY);
-        } else {
-            throw new Error(`Something went wrong.`);
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
         }
     }
 
-    @Param("body", "string")
-    @Param("carton", "string")
-    @Param("user", "string")
+    @Param("productionID", "string")
     @Returns("any")
     @Transaction()
-    public async link(
-        ctx: Context,
-        body: string,
-        carton: string,
-        user: string
-    ) {
-        //validate
-        let bodyQR = await StateDB.getState(ctx, body, this.QR_PKEY);
-        let cartonQR = await StateDB.getState(ctx, carton, this.QR_PKEY);
-        let userValid = await StateDB.validateData(
-            ctx,
-            JSON.parse(user),
-            UserSchema
-        );
-
-        if (!userValid) {
-            throw new Error(`User is invalid.`);
+    public async deleteProd(ctx: Context, productionID: string) {
+        try {
+            return await StateDB.deleteState(
+                ctx,
+                productionID,
+                this.PRODUCTION_PKEY
+            );
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
         }
-
-        if (bodyQR.isLinked) {
-            throw new Error(`${body} is linked with other carton.`);
-        }
-
-        if (cartonQR.isLinked) {
-            throw new Error(`${carton} is linked with other body.`);
-        }
-        if (bodyQR.isCarton) {
-            throw new Error(`${body}'s not a body.`);
-        }
-        if (!cartonQR.isCarton) {
-            throw new Error(`${carton}'s not a carton.`);
-        }
-
-        //link body to carton with compositekey
-        const compositeQRKeyB = ctx.stub.createCompositeKey(
-            this.QR_COMPOSITE_PKEY_B,
-            [body, carton]
-        );
-        const compositeQRKeyC = ctx.stub.createCompositeKey(
-            this.QR_COMPOSITE_PKEY_C,
-            [carton, body]
-        );
-
-        await ctx.stub.putState(compositeQRKeyB, new Buffer([0x00]));
-        await ctx.stub.putState(compositeQRKeyC, new Buffer([0x00]));
-
-        // update QRstate body + carton to linked true
-        bodyQR.isLinked = true;
-        cartonQR.isLinked = true;
-        bodyQR.updatedTime = new Date();
-        cartonQR.updatedTime = new Date();
-        bodyQR.updatedBy = userValid;
-        cartonQR.updatedBy = userValid;
-        await ctx.stub.putState(
-            this.QR_PKEY + bodyQR.qrCode,
-            Buffer.from(JSON.stringify(bodyQR))
-        );
-        await ctx.stub.putState(
-            this.QR_PKEY + cartonQR.qrCode,
-            Buffer.from(JSON.stringify(cartonQR))
-        );
-
-        // return result
-        return {
-            body,
-            carton,
-            message: `Linked ${body} to ${carton} successful`,
-            txId: ctx.stub.getTxID(),
-            timestamp: ctx.stub.getTxTimestamp(),
-        };
     }
 
-    @Param("qrCode", "string")
-    @Param("action", "string")
-    @Param("user", "string")
-    @Returns("any")
-    @Transaction()
-    public async addHistoryData(
-        ctx: Context,
-        qrCode: string,
-        action: string,
-        user: string
-    ) {
-        const newHistoryData = await StateDB.validateData(
-            ctx,
-            JSON.parse(action),
-            HistoryDataSchema
-        );
-        const newUser = await StateDB.validateData(
-            ctx,
-            JSON.parse(user),
-            UserSchema
-        );
-
-        //check data
-        let qrState = await StateDB.getState(ctx, qrCode, this.QR_PKEY);
-        let bodyQrCode;
-        if (!qrState.isCarton && qrState.isLinked) {
-            // isBody and linked => get CartonKey for add historyData
-            let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                this.QR_COMPOSITE_PKEY_B,
-                [qrState.qrCode]
-            );
-            for await (const qr of qrCompositeItr) {
-                qrCode = ctx.stub.splitCompositeKey(qr.key).attributes[1];
-                bodyQrCode = ctx.stub.splitCompositeKey(qr.key).attributes[0];
-                break;
-            }
-        } else if (!qrState.isCarton && !qrState.isLinked) {
-            throw new Error(
-                `This QR code ${qrState.qrCode} is a body. Can't be update if not linked to any carton.`
-            );
-        }
-
-        //add HistoryData
-        let targetQR = await StateDB.getState(ctx, qrCode, this.QR_PKEY);
-        if (!targetQR.historyData) {
-            targetQR.historyData = [];
-        }
-        targetQR.historyData.push(newHistoryData);
-        targetQR.updatedTime = new Date();
-        targetQR.updatedBy = newUser;
-        await ctx.stub.putState(
-            this.QR_PKEY + targetQR.qrCode,
-            Buffer.from(JSON.stringify(targetQR))
-        );
-
-        // Also update body QR code status
-        if (bodyQrCode) {
-            let bodyQR = await StateDB.getState(ctx, bodyQrCode, this.QR_PKEY);
-            bodyQR.updatedTime = new Date();
-            bodyQR.updatedBy = newUser;
-            await ctx.stub.putState(
-                this.QR_PKEY + bodyQR.qrCode,
-                Buffer.from(JSON.stringify(bodyQR))
-            );
-        }
-
-        return {
-            qrCode,
-            message: `Add history data to ${qrCode} successful`,
-        };
-    }
-
-    @Param("qrCode", "string")
+    @Param("productionID", "string")
     @Returns("any")
     @Transaction(false)
-    public async get(ctx: Context, qrCode: string): Promise<any> {
-        let qrState = await StateDB.getState(ctx, qrCode, this.QR_PKEY);
-
-        if (qrState.isLinked) {
-            if (!qrState.isCarton) {
-                // isBody and linked => get CartonKey
-                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                    this.QR_COMPOSITE_PKEY_B,
-                    [qrState.qrCode]
-                );
-                for await (const qr of qrCompositeItr) {
-                    let cartonCode = ctx.stub.splitCompositeKey(qr.key)
-                        .attributes[1];
-                    let result = await StateDB.getState(
-                        ctx,
-                        cartonCode,
-                        this.QR_PKEY
-                    );
-                    return { carton: result, body: qrState };
-                }
-            } else {
-                // isCarton and linked => get BodyKey
-                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                    this.QR_COMPOSITE_PKEY_C,
-                    [qrState.qrCode]
-                );
-                for await (const qr of qrCompositeItr) {
-                    let bodyCode = ctx.stub.splitCompositeKey(qr.key)
-                        .attributes[1];
-                    let result = await StateDB.getState(
-                        ctx,
-                        bodyCode,
-                        this.QR_PKEY
-                    );
-                    return { carton: qrState, body: result };
-                }
-            }
+    public async getProd(ctx: Context, productionID: string): Promise<any> {
+        try {
+            let production = await StateDB.getState(
+                ctx,
+                productionID,
+                this.PRODUCTION_PKEY
+            );
+            return { status: "success", id: productionID, production };
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
         }
-
-        return qrState;
     }
 
-    @Param("qrCode", "string")
+    @Param("activityLog", "string")
+    @Returns("any")
+    @Transaction()
+    public async createLog(ctx: Context, activityLog: string) {
+        try {
+            const newData = JSON.parse(activityLog);
+            let dataValid = await StateDB.validateData(
+                ctx,
+                newData,
+                ActivityLogSchema
+            );
+
+            // map it with production
+            await ctx.stub.createCompositeKey(this.COMPOSITE_PL_PKEY, [
+                newData.productionId,
+                newData.id,
+            ]);
+
+            return await StateDB.createState(
+                ctx,
+                dataValid,
+                this.ACTIVITY_LOG_PKEY
+            );
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
+        }
+    }
+
+    @Param("activityLogID", "string")
     @Returns("any")
     @Transaction(false)
-    public async getHistory(ctx: Context, qrCode: string): Promise<any> {
-        // Validate qrCode
-        let qrState = await StateDB.getState(ctx, qrCode, this.QR_PKEY);
-        //TODO: paginate for big result
-        if (qrState.isLinked) {
-            if (!qrState.isCarton) {
-                // isBody and linked => get CartonKey
-                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                    this.QR_COMPOSITE_PKEY_B,
-                    [qrCode]
-                );
-                for await (const qr of qrCompositeItr) {
-                    let cartonQrCode = ctx.stub.splitCompositeKey(qr.key)
-                        .attributes[1];
+    public async getLog(ctx: Context, activityLogID: string): Promise<any> {
+        try {
+            const log = await StateDB.getState(
+                ctx,
+                activityLogID,
+                this.ACTIVITY_LOG_PKEY
+            );
+            return { status: "success", id: activityLogID, log };
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
+        }
+    }
 
-                    let bodyHistory = await StateDB.getHistory(
-                        ctx,
-                        qrState.qrCode,
-                        this.QR_PKEY
-                    );
-                    let cartonHistory = await StateDB.getHistory(
-                        ctx,
-                        cartonQrCode,
-                        this.QR_PKEY
-                    );
-                    return { carton: cartonHistory, body: bodyHistory };
-                }
-            } else {
-                // isCarton and linked => get BodyKey
-                let qrCompositeItr = ctx.stub.getStateByPartialCompositeKey(
-                    this.QR_COMPOSITE_PKEY_C,
-                    [qrCode]
-                );
-                for await (const qr of qrCompositeItr) {
-                    let bodyQrCode = ctx.stub.splitCompositeKey(qr.key)
-                        .attributes[1];
+    @Param("productionID", "string")
+    @Returns("any")
+    @Transaction(false)
+    public async getLogsByProd(
+        ctx: Context,
+        productionID: string
+    ): Promise<any> {
+        try {
+            await StateDB.getState(ctx, productionID, this.PRODUCTION_PKEY);
 
-                    let bodyHistory = await StateDB.getHistory(
-                        ctx,
-                        bodyQrCode,
-                        this.QR_PKEY
-                    );
-                    let cartonHistory = await StateDB.getHistory(
-                        ctx,
-                        qrState.qrCode,
-                        this.QR_PKEY
-                    );
-                    return { carton: cartonHistory, body: bodyHistory };
-                }
+            let prodLogCompositeItr = ctx.stub.getStateByPartialCompositeKey(
+                this.COMPOSITE_PL_PKEY,
+                [productionID]
+            );
+
+            let logs: any = [];
+            for await (const log of prodLogCompositeItr) {
+                let logId = ctx.stub.splitCompositeKey(log.key).attributes[1];
+                let result = await StateDB.getState(
+                    ctx,
+                    logId,
+                    this.PRODUCTION_PKEY
+                );
+                logs.push(result);
             }
-        } else {
-            if (qrState.isCarton) {
-                return {
-                    carton: await StateDB.getHistory(ctx, qrCode, this.QR_PKEY),
-                };
-            } else {
-                return {
-                    body: await StateDB.getHistory(ctx, qrCode, this.QR_PKEY),
-                };
-            }
+
+            return {
+                status: "success",
+                id: productionID,
+                data: { logs },
+            };
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
+        }
+    }
+
+    @Param("productionID", "string")
+    @Returns("any")
+    @Transaction(false)
+    public async getProdHistory(
+        ctx: Context,
+        productionID: string
+    ): Promise<any> {
+        try {
+            // Validate qrCode
+            await StateDB.getState(ctx, productionID, this.PRODUCTION_PKEY);
+
+            const histories = await StateDB.getHistory(
+                ctx,
+                productionID,
+                this.PRODUCTION_PKEY
+            );
+
+            //TODO: paginate for big result
+            return {
+                status: "success",
+                id: productionID,
+                data: { histories },
+            };
+        } catch (e) {
+            return {
+                status: "failed",
+                message: e,
+            };
         }
     }
 }
