@@ -43,10 +43,10 @@ export class Qrcode extends Contract {
                 this.PRODUCTION_PKEY
             );
         } catch (e) {
-            console.log(e);
+            console.log(e.message);
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
@@ -72,7 +72,7 @@ export class Qrcode extends Contract {
         } catch (e) {
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
@@ -90,7 +90,7 @@ export class Qrcode extends Contract {
         } catch (e) {
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
@@ -109,7 +109,7 @@ export class Qrcode extends Contract {
         } catch (e) {
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
@@ -140,7 +140,7 @@ export class Qrcode extends Contract {
         } catch (e) {
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
@@ -159,7 +159,7 @@ export class Qrcode extends Contract {
         } catch (e) {
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
@@ -198,7 +198,7 @@ export class Qrcode extends Contract {
         } catch (e) {
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
@@ -229,7 +229,7 @@ export class Qrcode extends Contract {
         } catch (e) {
             return {
                 status: "failed",
-                message: e,
+                message: e.message,
             };
         }
     }
