@@ -6,7 +6,7 @@ const createProd = async (req, res, next) => {
 
     const bufferResult = await FabricContract.submitTransaction(
       "Qrcode:createProd",
-      data
+      JSON.stringify(data)
     );
 
     res.json({
