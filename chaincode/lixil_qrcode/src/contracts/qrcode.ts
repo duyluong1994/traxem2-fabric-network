@@ -43,6 +43,7 @@ export class Qrcode extends Contract {
                 this.PRODUCTION_PKEY
             );
         } catch (e) {
+            console.log(e);
             return {
                 status: "failed",
                 message: e,
