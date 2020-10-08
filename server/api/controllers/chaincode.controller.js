@@ -9,6 +9,7 @@ const createProd = async (req, res, next) => {
       JSON.stringify(data)
     );
 
+    console.log("debug", JSON.stringify(data));
     res.json({
       status: "success",
       status_code: 200,
