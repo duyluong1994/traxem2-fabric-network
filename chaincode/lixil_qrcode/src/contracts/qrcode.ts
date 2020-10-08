@@ -31,6 +31,7 @@ export class Qrcode extends Contract {
     public async createProd(ctx: Context, production: string) {
         try {
             const newData = JSON.parse(production);
+            console.log(newData);
             let dataValid = await StateDB.validateData(
                 ctx,
                 newData,
@@ -43,7 +44,6 @@ export class Qrcode extends Contract {
                 this.PRODUCTION_PKEY
             );
         } catch (e) {
-            console.log(e.message);
             return {
                 status: "failed",
                 message: e.message,
