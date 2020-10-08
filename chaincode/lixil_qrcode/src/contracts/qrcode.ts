@@ -30,9 +30,7 @@ export class Qrcode extends Contract {
     @Transaction()
     public async createProd(ctx: Context, production: string) {
         try {
-            console.log(production);
             const newData = JSON.parse(production);
-            console.log(newData);
             let dataValid = await StateDB.validateData(
                 ctx,
                 newData,

@@ -3,13 +3,11 @@ const { ErrorHandler } = require("../errors/error");
 const createProd = async (req, res, next) => {
   try {
     const data = req.body;
-    console.log("data", data);
     const bufferResult = await FabricContract.submitTransaction(
       "Qrcode:createProd",
       JSON.stringify(data)
     );
 
-    console.log("debug", JSON.stringify(data));
     res.json({
       status: "success",
       status_code: 200,
