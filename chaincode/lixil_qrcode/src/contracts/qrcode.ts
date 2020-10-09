@@ -83,8 +83,6 @@ export class Qrcode extends Contract {
     @Transaction()
     public async deleteProd(ctx: Context, productionID: string) {
         try {
-            console.log(productionID);
-            console.log(typeof productionID);
             return await StateDB.removeState(
                 ctx,
                 productionID,

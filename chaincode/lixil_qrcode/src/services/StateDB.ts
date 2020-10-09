@@ -62,9 +62,7 @@ export const removeState = async (ctx: Context, id: any, prefix: string) => {
         throw new Error(`${id} does not exist.`);
     }
 
-    console.log(prefix + id);
-    console.log(typeof (prefix + id));
-    await ctx.stub.deleteState(prefix + id);
+    ctx.stub.deleteState(prefix + id);
 
     console.info("Deleted <--> ", prefix + id);
     return {
