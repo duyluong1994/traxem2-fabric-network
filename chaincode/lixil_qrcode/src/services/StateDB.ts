@@ -24,6 +24,7 @@ export const createState = async (ctx: Context, item: any, prefix: string) => {
 
     return {
         status: "success",
+        status_code: 200,
         data: item,
         message: "Create successful",
         txId: ctx.stub.getTxID(),
@@ -46,6 +47,7 @@ export const updateState = async (ctx: Context, item: any, prefix: string) => {
     console.info("Updated <--> ", it);
     return {
         status: "success",
+        status_code: 200,
         data: it,
         message: "Update successful",
         txId: ctx.stub.getTxID(),
@@ -65,6 +67,7 @@ export const deleteState = async (ctx: Context, id: any, prefix: string) => {
     console.info("Deleted <--> ", prefix + id);
     return {
         status: "success",
+        status_code: 200,
         id,
         message: "Delete successful",
         txId: ctx.stub.getTxID(),

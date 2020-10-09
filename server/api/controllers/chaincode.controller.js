@@ -9,9 +9,6 @@ const createProd = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      data: data,
       ...JSON.parse(bufferResult.toString()),
     });
   } catch (e) {
@@ -29,9 +26,6 @@ const updateProd = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      data: data,
       ...JSON.parse(bufferResult.toString()),
     });
   } catch (e) {
@@ -51,10 +45,7 @@ const deleteProd = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      message: "Delete successful",
-      data: JSON.parse(evalResult.toString()),
+      ...JSON.parse(evalResult.toString()),
     });
   } catch (e) {
     next(e);
@@ -73,10 +64,7 @@ const getProd = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      message: "Request successful",
-      data: JSON.parse(evalResult.toString()),
+      ...JSON.parse(evalResult.toString()),
     });
   } catch (e) {
     next(e);
@@ -93,9 +81,6 @@ const createLog = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      data,
       ...JSON.parse(bufferResult.toString()),
     });
   } catch (e) {
@@ -115,10 +100,7 @@ const getLog = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      message: "Request successful",
-      data: JSON.parse(evalResult.toString()),
+      ...JSON.parse(evalResult.toString()),
     });
   } catch (e) {
     next(e);
@@ -137,10 +119,7 @@ const getLogsByProd = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      message: "Request successful",
-      data: JSON.parse(evalResult.toString()),
+      ...JSON.parse(evalResult.toString()),
     });
   } catch (e) {
     next(e);
@@ -159,10 +138,7 @@ const getProdHistory = async (req, res, next) => {
     );
 
     res.json({
-      status: "success",
-      status_code: 200,
-      message: "Request successful",
-      data: JSON.parse(evalResult.toString()),
+      ...JSON.parse(evalResult.toString()),
     });
   } catch (e) {
     next(e);

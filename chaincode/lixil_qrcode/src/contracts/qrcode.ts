@@ -44,7 +44,8 @@ export class Qrcode extends Contract {
             );
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
@@ -70,7 +71,8 @@ export class Qrcode extends Contract {
             );
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
@@ -88,7 +90,8 @@ export class Qrcode extends Contract {
             );
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
@@ -104,10 +107,16 @@ export class Qrcode extends Contract {
                 productionID,
                 this.PRODUCTION_PKEY
             );
-            return { status: "success", id: productionID, production };
+            return {
+                status: "success",
+                status_code: 200,
+                id: productionID,
+                data: production,
+            };
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
@@ -143,7 +152,8 @@ export class Qrcode extends Contract {
             );
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
@@ -159,10 +169,16 @@ export class Qrcode extends Contract {
                 activityLogID,
                 this.ACTIVITY_LOG_PKEY
             );
-            return { status: "success", id: activityLogID, log };
+            return {
+                status: "success",
+                status_code: 200,
+                id: activityLogID,
+                data: log,
+            };
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
@@ -196,12 +212,14 @@ export class Qrcode extends Contract {
 
             return {
                 status: "success",
+                status_code: 200,
                 id: productionID,
                 data: { logs },
             };
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
@@ -227,12 +245,14 @@ export class Qrcode extends Contract {
             //TODO: paginate for big result
             return {
                 status: "success",
+                status_code: 200,
                 id: productionID,
                 data: { histories },
             };
         } catch (e) {
             return {
-                status: "failed",
+                status: "false",
+                status_code: 400,
                 message: e.message,
             };
         }
