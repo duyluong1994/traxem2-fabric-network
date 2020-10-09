@@ -55,14 +55,14 @@ export const updateState = async (ctx: Context, item: any, prefix: string) => {
     };
 };
 
-export const deleteState = async (ctx: Context, id: any, prefix: string) => {
+export const removeState = async (ctx: Context, id: any, prefix: string) => {
     const dataAsBytes = await ctx.stub.getState(prefix + id);
 
     if (!dataAsBytes || dataAsBytes.length === 0) {
         throw new Error(`${id} does not exist.`);
     }
 
-    const r = await ctx.stub.deleteState(prefix + id);
+    await ctx.stub.deleteState(prefix + id);
 
     console.info("Deleted <--> ", prefix + id);
     return {
