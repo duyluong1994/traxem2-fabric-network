@@ -6,8 +6,9 @@ import * as yup from "yup";
 export const ActivityLogSchema = yup.object().shape({
     id: yup.string().required(),
     content: yup.string().required(),
+    type: yup.string().required(),
     createdTime: yup.date().required(),
     createdId: yup.string().required(),
-    productionId: yup.string().required(),
-    productionName: yup.string().required(),
+    productionId: yup.string().notRequired(),
+    productionName: yup.string().notRequired(),
 });
