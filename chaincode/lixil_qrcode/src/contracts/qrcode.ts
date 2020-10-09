@@ -126,10 +126,15 @@ export class Qrcode extends Contract {
             );
 
             // map it with production
-            await ctx.stub.createCompositeKey(this.COMPOSITE_PL_PKEY, [
-                newData.productionId,
-                newData.id,
-            ]);
+            if (newData.productionId) {
+                for (const it of newData.productionId) {
+                    const compositeKey = await ctx.stub.createCompositeKey(
+                        this.COMPOSITE_PL_PKEY,
+                        [newData.it, newData.id]
+                    );
+                    await ctx.stub.putState(compositeKey, new Buffer([0x00]));
+                }
+            }
 
             return await StateDB.createState(
                 ctx,
@@ -184,7 +189,7 @@ export class Qrcode extends Contract {
                 let result = await StateDB.getState(
                     ctx,
                     logId,
-                    this.PRODUCTION_PKEY
+                    this.ACTIVITY_LOG_PKEY
                 );
                 logs.push(result);
             }

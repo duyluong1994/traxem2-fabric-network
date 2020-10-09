@@ -3,12 +3,32 @@
 // Mail: luong.duc.duy@vsi-international.com
 // Telegram: t.me/mr_eos94
 import * as yup from "yup";
+import { PrefixMaster } from "../PrefixMaster";
 export const ActivityLogSchema = yup.object().shape({
     id: yup.string().required(),
     content: yup.string().required(),
     type: yup.string().required(),
     createdTime: yup.date().required(),
     createdId: yup.string().required(),
-    productionId: yup.string().notRequired(),
+    productionId: yup
+        .array()
+        .of(yup.string())
+        .test("productionID", "productionID is not valid", async function (
+            productionId
+        ) {
+            if (productionId) {
+                const context: any = this.options.context;
+                for (let id of productionId) {
+                    let dataAsBytes = await context.ctx.stub.getState(
+                        PrefixMaster.PRODUCTION + id
+                    );
+                    if (!dataAsBytes || dataAsBytes.length === 0) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        })
+        .notRequired(),
     productionName: yup.string().notRequired(),
 });
