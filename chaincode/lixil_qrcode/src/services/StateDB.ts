@@ -55,7 +55,7 @@ export const updateState = async (ctx: Context, item: any, prefix: string) => {
     };
 };
 
-export const removeState = async (ctx: Context, id: string, prefix: string) => {
+export const removeState = async (ctx: Context, id: any, prefix: string) => {
     const dataAsBytes = await ctx.stub.getState(prefix + id);
 
     if (!dataAsBytes || dataAsBytes.length === 0) {
