@@ -133,8 +133,6 @@ export class Qrcode extends Contract {
                 newData,
                 ActivityLogSchema
             );
-            console.log(newData);
-            console.log(dataValid);
 
             // map it with production
             if (newData.productionId) {
