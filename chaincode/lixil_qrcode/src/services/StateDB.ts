@@ -1,5 +1,4 @@
 import { Context } from "fabric-contract-api";
-import { ChaincodeStub } from "fabric-shim";
 
 export const getAllResults = async (promiseOfIterator: any) => {
     const allResults = [];
