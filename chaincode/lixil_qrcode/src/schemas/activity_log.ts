@@ -18,6 +18,7 @@ export const ActivityLogSchema = yup.object().shape({
         ) {
             if (productionId) {
                 const context: any = this.options.context;
+                console.log(productionId);
                 for (let id of productionId) {
                     let dataAsBytes = await context.ctx.stub.getState(
                         PrefixMaster.PRODUCTION + id
