@@ -136,7 +136,9 @@ export class Qrcode extends Contract {
 
             // map it with production
             if (newData.productionId) {
+                console.log(newData.productionId);
                 for (const it of newData.productionId) {
+                    console.log("1", it);
                     const compositeKey = await ctx.stub.createCompositeKey(
                         this.COMPOSITE_PL_PKEY,
                         [newData.it, newData.id]
