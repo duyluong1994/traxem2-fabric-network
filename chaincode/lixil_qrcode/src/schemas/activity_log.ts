@@ -13,7 +13,7 @@ export const ActivityLogSchema = yup.object().shape({
     productionId: yup
         .array()
         .of(yup.string())
-        .test("productionID", "productionID is not valid", async function (
+        .test("productionId", "productionId is not valid", async function (
             productionId
         ) {
             if (productionId) {
