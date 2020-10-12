@@ -110,6 +110,7 @@ export class Qrcode extends Contract {
             return {
                 status: "success",
                 status_code: 200,
+                message: "Get successful",
                 id: productionID,
                 data: production,
             };
@@ -172,6 +173,7 @@ export class Qrcode extends Contract {
             return {
                 status: "success",
                 status_code: 200,
+                message: "Get successful",
                 id: activityLogID,
                 data: log,
             };
