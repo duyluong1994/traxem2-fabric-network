@@ -32,7 +32,7 @@ const FabricService = async function () {
   global.FabricNetwork = await FabricGateway.getNetwork("traxemchannel");
 
   // Get the contract from the network.
-  global.FabricContract = FabricNetwork.getContract("lixil_qrcode");
+  global.FabricContract = FabricNetwork.getContract("qrcode");
 };
 
 module.exports = { FabricService };
