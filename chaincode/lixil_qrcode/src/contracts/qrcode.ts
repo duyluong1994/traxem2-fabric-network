@@ -139,7 +139,7 @@ export class Qrcode extends Contract {
                 for (const it of newData.productionId) {
                     const compositeKey = ctx.stub.createCompositeKey(
                         this.COMPOSITE_PL_PKEY,
-                        [newData.it, newData.id]
+                        [it, newData.id]
                     );
                     await ctx.stub.putState(compositeKey, new Buffer([0x00]));
                 }
