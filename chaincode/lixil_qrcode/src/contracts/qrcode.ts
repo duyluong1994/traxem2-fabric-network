@@ -78,22 +78,24 @@ export class Qrcode extends Contract {
         }
     }
 
-    @Param("productionID", "string")
-    @Returns("any")
-    @Transaction()
-    public async deleteProd(ctx: Context, productionID: string) {
-        try {
-            return await ctx.stub.deleteState(
-                this.PRODUCTION_PKEY + productionID
-            );
-        } catch (e) {
-            return {
-                status: "false",
-                status_code: 400,
-                message: e.message,
-            };
-        }
-    }
+    // @Param("productionID", "string")
+    // @Returns("any")
+    // @Transaction(true)
+    // public async deleteProd(ctx: Context, productionID: string) {
+    //     try {
+    //         return await StateDB.removeState(
+    //             ctx,
+    //             productionID,
+    //             this.PRODUCTION_PKEY
+    //         );
+    //     } catch (e) {
+    //         return {
+    //             status: "false",
+    //             status_code: 400,
+    //             message: e.message,
+    //         };
+    //     }
+    // }
 
     @Param("productionID", "string")
     @Returns("any")

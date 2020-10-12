@@ -33,24 +33,24 @@ const updateProd = async (req, res, next) => {
   }
 };
 
-const deleteProd = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    if (typeof id.toString() !== "string") {
-      throw new ErrorHandler(400, "ID must be a string.");
-    }
-    const evalResult = await FabricContract.evaluateTransaction(
-      "Qrcode:deleteProd",
-      id.toString()
-    );
-
-    res.json({
-      ...JSON.parse(evalResult.toString()),
-    });
-  } catch (e) {
-    next(e);
-  }
-};
+// const deleteProd = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     if (typeof id.toString() !== "string") {
+//       throw new ErrorHandler(400, "ID must be a string.");
+//     }
+//     const evalResult = await FabricContract.evaluateTransaction(
+//       "Qrcode:deleteProd",
+//       id.toString()
+//     );
+//
+//     res.json({
+//       ...JSON.parse(evalResult.toString()),
+//     });
+//   } catch (e) {
+//     next(e);
+//   }
+// };
 
 const getProd = async (req, res, next) => {
   try {

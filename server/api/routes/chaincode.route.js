@@ -4,12 +4,11 @@ const {
   getLogsByProd,
   createProd,
   updateProd,
-  deleteProd,
   getLog,
   createLog,
 } = require("../controllers/chaincode.controller");
 const ChainCodeRoutes = (app) => {
-  app.route("/production/:id").get(getProd).delete(deleteProd);
+  app.route("/production/:id").get(getProd);
   app.route("/production/:id/block_history").get(getProdHistory);
   app.route("/production/:id/log").get(getLogsByProd);
   app.route("/production").post(createProd).put(updateProd);
