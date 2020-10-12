@@ -17,12 +17,12 @@
 
    * CORE_PEER_ADDRESS="peer1.org1.traxem.vn:8051" CORE_PEER_TLS_ROOTCERT_FILE="/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.traxem.vn/peers/peer1.org1.traxem.vn/tls/ca.crt" peer lifecycle chaincode install fabcar.tar.gz
 
-   * peer lifecycle chaincode approveformyorg -C traxemchannel -n fabcar -v 1.0 --package-id \$CC_PACKAGE_ID --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
+   * peer lifecycle chaincode approveformyorg -C traxemchannel -n lixil_qrcode -v 1.0.0 --package-id lixil_qrcode:3267a4fff9825f5b148419f2bebf9e88182a70223eb3095f84abb1cff7523524 --sequence 22 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
 
-   * peer lifecycle chaincode checkcommitreadiness -C traxemchannel -n traxem2-qrcode -v 1.0 --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
+   * peer lifecycle chaincode checkcommitreadiness -C traxemchannel -n lixil_qrcode -v 1.0.0 --sequence 22 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
 
    * (peerAddresses and tlsRootCertFiles if have more than 1 Org)
-   peer lifecycle chaincode commit -o orderer.traxem.vn:7050 -C traxemchannel -n traxem2-qrcode -v 1.0 --sequence 1 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
+   peer lifecycle chaincode commit -o orderer.traxem.vn:7050 -C traxemchannel -n lixil_qrcode -v 1.0.0 --sequence 22 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem
 
    * peer lifecycle chaincode querycommitted -C traxemchannel -n lixil_qrcode --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/traxem.vn/orderers/orderer.traxem.vn/msp/tlscacerts/tlsca.traxem.vn-cert.pem --output json
 
