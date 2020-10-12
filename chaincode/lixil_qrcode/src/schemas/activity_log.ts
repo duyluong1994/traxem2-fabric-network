@@ -18,15 +18,18 @@ export const ActivityLogSchema = yup.object().shape({
         ) {
             if (productionId) {
                 const context: any = this.options.context;
-                console.log(this.options, context);
+                console.log(context);
                 for (let id of productionId) {
-                    let dataAsBytes = await context.stub.getState(
+                    console.log(id);
+                    let dataAsBytes = await context.ctx.stub.getState(
                         PrefixMaster.PRODUCTION + id
                     );
+                    console.log(dataAsBytes);
                     if (!dataAsBytes || dataAsBytes.length === 0) {
                         return false;
                     }
                 }
+                return true;
             }
             return true;
         })
