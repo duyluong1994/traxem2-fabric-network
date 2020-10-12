@@ -151,7 +151,6 @@ module.exports = {
   getLogsByProd,
   createProd,
   updateProd,
-  deleteProd,
   getLog,
   createLog,
 };
