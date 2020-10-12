@@ -78,5 +78,3 @@ docker container prune
 
 http://localhost:5984/_utils
 
-## TODO
-- FIx bug when get History between linked and not linked carton body.
