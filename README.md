@@ -15,8 +15,8 @@ configtxgen -profile OneOrgsChannel -outputCreateChannelTx ./channel-artifacts/c
 configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID traxemchannel -asOrg Org1MSP
 
 docker-compose -f host1.yaml up -d
-docker-compose -f host1.yaml -f host_couch.yaml up -d
-docker-compose -f host1.yaml -f host_couch.yaml -f host_ca.yaml up -d
+docker-compose -f host2.yaml -f host_couch2.yaml up -d
+docker-compose -f host1.yaml -f host_couch1.yaml -f host_ca.yaml up -d
 
 ## create and join channel
 
@@ -64,7 +64,7 @@ use ccp-generate.sh script to get connection-profile.json file
 ## clean each host
 
 docker-compose -f hostn.yaml down -v
-docker rmi $(docker images | awk '($1 ~ /dev-peer.\*/) {print \$3}')
+docker rmi $(docker images | awk '($1 ~ /dev-peer.\*/) {print $3}')
 
 ## remove everything docker
 
