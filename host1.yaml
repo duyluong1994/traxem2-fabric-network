@@ -32,14 +32,6 @@ services:
     networks:
       - byfn
 
-  peer1.org1.traxem.vn:
-    container_name: peer1.org1.traxem.vn
-    extends:
-      file: base/docker-compose-base.yaml
-      service: peer1.org1.traxem.vn
-    networks:
-      - byfn
-
   cli:
     container_name: cli
     image: hyperledger/fabric-tools:$IMAGE_TAG
@@ -70,6 +62,5 @@ services:
     depends_on:
       - orderer.traxem.vn
       - peer0.org1.traxem.vn
-      - peer1.org1.traxem.vn
     networks:
       - byfn

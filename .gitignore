@@ -3,6 +3,7 @@
 node_modules/
 channel-artifacts/*
 crypto-config/*
+backup/*
 connection-profile.json
 .env
 server/block_explorer/connection-profile/connection-explorer-profile.json
