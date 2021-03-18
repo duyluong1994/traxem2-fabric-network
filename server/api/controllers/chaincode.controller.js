@@ -1,4 +1,6 @@
 const { ErrorHandler } = require("../errors/error");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const createProd = async (req, res, next) => {
   try {

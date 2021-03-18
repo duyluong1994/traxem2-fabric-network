@@ -1,6 +1,9 @@
 const { Gateway, Wallets } = require("fabric-network");
 const path = require("path");
 const fs = require("fs");
+const dotenv = require("dotenv");
+dotenv.config();
+
 const FabricService = async function () {
   const ccpPath = path.resolve(__dirname, "..", "connection-profile.json");
   const ccp = JSON.parse(fs.readFileSync(ccpPath, "utf8"));
@@ -32,7 +35,7 @@ const FabricService = async function () {
   global.FabricNetwork = await FabricGateway.getNetwork("traxemchannel");
 
   // Get the contract from the network.
-  global.FabricContract = FabricNetwork.getContract("qrcode");
+  global.FabricContract = FabricNetwork.getContract(process.env.CHAINCODE_ID);
 };
 
 module.exports = { FabricService };
